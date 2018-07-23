@@ -163,6 +163,41 @@ component output="false" displayname="pdfbox.cfc"  {
   }
 
   /**
+  * @hint Removes metadata from the document
+  *
+  * Reference: metadata is stored in two separate locations in a document:
+    * The Info (Document Information) - likely a key value pairing.
+    * The XMP XML
+  * Different PDF readers, when displaying document information may give preference to different sources. For example, Preview may read the "Author A" from Document Information, while Acrobat may ignore that and read dc:creator element from the XML and display "Author B".
+  * Using the PDFDebugger bundled with PDFBox, via `java -jar pdfbox-app-2.0.11.jar PDFDebugger -viewstructure example.pdf` will provide an accurate view of both Document Information and XML metadata, and so is preferable to pdf readers
+  *
+  */
+  public any function removeMetaData() {
+    var documentInfo = variables.pdf.getDocumentInformation();
+    documentInfo.setAuthor( javaCast( 'null', '' ) ); //dcSchema addCreator()
+    documentInfo.setCreationDate( javaCast( 'null', '' ) );
+    documentInfo.setCreator( javaCast( 'null', '' ) );
+    documentInfo.setKeywords( javaCast( 'null', '' ) );
+    documentInfo.setModificationDate( javaCast( 'null', '' ) );
+    documentInfo.setProducer( javaCast( 'null', '' ) ); //i.e. Acrobat Pro DC
+    documentInfo.setSubject( javaCast( 'null', '' ) ); //description
+    documentInfo.setTitle( javaCast( 'null', '' ) );
+    documentInfo.setTrapped( javaCast( 'null', '' ) );
+
+    var XMPMetadata = createObject( 'java', 'org.apache.xmpbox.XMPMetadata' );
+    var metadata = XMPMetadata.createXMPMetadata();
+
+    var serializer = createObject( 'java', 'org.apache.xmpbox.xml.XmpSerializer' );
+    var baos = createObject( 'java', 'java.io.ByteArrayOutputStream' ).init();
+    serializer.serialize( metadata, baos, true );
+    var metadataStream = createObject( 'java', 'org.apache.pdfbox.pdmodel.common.PDMetadata' ).init( variables.pdf );
+    metadataStream.importXMPMetadata( baos.toByteArray() );
+    variables.pdf.getDocumentCatalog().setMetadata( metadataStream );
+
+    return this;
+  }
+
+  /**
   * @hint By default, the file is saved to the same path that it was loaded from.
   *
   * Note that saving the document also automatically closes the instance of the PDDocument that was created, so it should be the last thing you do with this object.
