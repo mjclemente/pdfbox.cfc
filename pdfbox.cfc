@@ -83,6 +83,18 @@ component output="false" displayname="pdfbox.cfc"  {
   }
 
   /**
+  * https://stackoverflow.com/questions/17019960/extract-embedded-files-from-pdf-using-pdfbox-in-net-application
+  * https://github.com/Valuya/fontbox/blob/master/examples/src/main/java/org/apache/pdfbox/examples/pdmodel/EmbeddedFiles.java
+  * @hint Removes embedded files
+  */
+  public any function removeEmbeddedFiles() {
+    var documentTree = createObject( 'java', 'org.apache.pdfbox.pdmodel.PDDocumentNameDictionary' ).init( variables.pdf.getDocumentCatalog() );
+    var fileTreeNode = documentTree.getEmbeddedFiles();
+    fileTreeNode.getCOSObject().clear();
+    return this;
+  }
+
+  /**
   * @hint By default, the file is saved to the same path that it was loaded from.
   *
   * Note that saving the document also automatically closes the instance of the PDDocument that was created, so it should be the last thing you do with this object.
