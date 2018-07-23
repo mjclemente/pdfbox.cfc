@@ -106,6 +106,8 @@ component output="false" displayname="pdfbox.cfc"  {
 
     removeFormFieldActions();
 
+    removeLinkActions();
+
     return this;
   }
 
@@ -162,6 +164,36 @@ component output="false" displayname="pdfbox.cfc"  {
 
     }
 
+    return this;
+  }
+
+  /**
+  * https://pdfbox.apache.org/docs/2.0.8/javadocs/org/apache/pdfbox/pdmodel/interactive/annotation/PDAnnotationLink.html
+  * @hint removes actions embedded in the links ( triggered onFocus, onBlur, etc )
+  */
+  public any function removeLinkActions() {
+    var pages = variables.pdf.getPages();
+    var iterator = pages.iterator();
+
+    while( iterator.hasNext() ) {
+      var page = iterator.next();
+
+      var annotationIterator = page.getAnnotations().iterator();
+
+      while( annotationIterator.hasNext() ) {
+        var annotation = annotationIterator.next();
+
+        if ( annotation.getSubtype() == 'Link' ) {
+
+          var action = annotation.getAction();
+          if ( !isNull( action ) && action.getSubType() == 'JavaScript' ) {
+            action.getCOSObject().clear();
+          }
+
+        }
+      }
+
+    }
     return this;
   }
 
