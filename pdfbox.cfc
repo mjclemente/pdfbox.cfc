@@ -21,7 +21,7 @@ component output="false" displayname="pdfbox.cfc"  {
   }
 
   /**
-  * //https://stackoverflow.com/questions/14454387/pdfbox-how-to-flatten-a-pdf-form#19723539
+  * https://stackoverflow.com/questions/14454387/pdfbox-how-to-flatten-a-pdf-form#19723539
   * @hint Flattens any forms on the pdf
   */
   public any function flatten() {
