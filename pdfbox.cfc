@@ -99,6 +99,13 @@ component output="false" displayname="pdfbox.cfc"  {
     }
 
     variables.pdf.save( dest.len() ? dest : variables.src );
+    close();
+  }
+
+  /**
+  * @hint pdf documents that are opened need to be closed. Calling save() will close them automatically, but if you're working with them in some other way, you'll need to manually close them.
+  */
+  public void function close() {
     variables.pdf.close();
   }
 
