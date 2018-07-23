@@ -56,6 +56,7 @@ component output="false" displayname="pdfbox.cfc"  {
   * https://lists.apache.org/thread.html/d5b5f7a1d07d4eb9c515054ae7e87bdf4aefb3f138b235f82297401d@%3Cusers.pdfbox.apache.org%3E
   * @hint Strips out comments and other annotations
   * Form fields are made visible/usable via annotations (as I understand it); consequently, removing all annotations renders forms, effectively, invisible and unusable, though the markup remains present (visible via the Debugger). The default behavior, therefore, is to leave annotations related to forms present, so that the forms remain functional. While you can remove form annotations by setting preserveForm = false, the better approach is to use flatten().
+  * Reminder: Added links are a type of annotation (PDAnnotationLink) so they're removed by this method
   */
   public any function removeAnnotations( boolean preserveForm = true ) {
     var pages = variables.pdf.getPages();
@@ -139,6 +140,8 @@ component output="false" displayname="pdfbox.cfc"  {
 
   /**
   * https://pdfbox.apache.org/docs/2.0.8/javadocs/org/apache/pdfbox/pdmodel/interactive/action/PDFormFieldAdditionalActions.html
+  * There may be another class this need to address: PDAnnotationAdditionalActions (but I'm not sure exactly how these actions are differ from those handled here).
+  * For reference and future examination, PDAnnotationAdditionalActions is returned by PDAnnotationWidget (https://pdfbox.apache.org/docs/2.0.8/javadocs/org/apache/pdfbox/pdmodel/interactive/annotation/PDAnnotationWidget.html), which is the annotation type related to form fields.
   * @hint removes actions embedded in the form fields ( triggered onFocus, onBlur, etc )
   */
   public any function removeFormFieldActions() {
