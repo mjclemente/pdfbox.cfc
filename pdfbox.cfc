@@ -35,6 +35,54 @@ component output="false" displayname="pdfbox.cfc"  {
   }
 
   /**
+  * https://pdfbox.apache.org/docs/2.0.8/javadocs/org/apache/pdfbox/pdmodel/interactive/annotation/PDAnnotation.html
+  * @hint returns all annotations within the pdf as an array; the type of each object returned is PDAnnotation, so you'll need to look at the javadocs for that to see what methods are available
+  */
+  public array function listAnnotations() {
+    var annotations = [];
+    var pages = variables.pdf.getPages();
+    var iterator = pages.iterator();
+
+    while( iterator.hasNext() ) {
+      var page = iterator.next();
+      annotations.append( page.getAnnotations(), true );
+    }
+
+    return annotations;
+  }
+
+  /**
+  * https://stackoverflow.com/questions/32741468/how-to-delete-annotations-in-pdf-file-using-pdfbox
+  * https://lists.apache.org/thread.html/d5b5f7a1d07d4eb9c515054ae7e87bdf4aefb3f138b235f82297401d@%3Cusers.pdfbox.apache.org%3E
+  * @hint Strips out comments and other annotations
+  * Form fields are made visible/usable via annotations (as I understand it); consequently, removing all annotations renders forms, effectively, invisible and unusable, though the markup remains present (visible via the Debugger). The default behavior, therefore, is to leave annotations related to forms present, so that the forms remain functional. While you can remove form annotations by setting preserveForm = false, the better approach is to use flatten().
+  */
+  public any function removeAnnotations( boolean preserveForm = true ) {
+    var pages = variables.pdf.getPages();
+    var iterator = pages.iterator();
+
+    while( iterator.hasNext() ) {
+      var page = iterator.next();
+
+      if ( !preserveForm ) {
+        page.setAnnotations( javaCast( 'null', '' ) );
+      } else {
+        var annotations = [];
+        var annotationIterator = page.getAnnotations().iterator();
+
+        while( annotationIterator.hasNext() ) {
+          var annotation = annotationIterator.next();
+          if ( annotation.getSubtype() == 'Widget' ) {
+            annotations.append( annotation );
+          }
+        }
+        page.setAnnotations( annotations );
+      }
+    }
+    return this;
+  }
+
+  /**
   * @hint By default, the file is saved to the same path that it was loaded from.
   *
   * Note that saving the document also automatically closes the instance of the PDDocument that was created, so it should be the last thing you do with this object.
