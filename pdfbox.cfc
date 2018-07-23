@@ -95,6 +95,74 @@ component output="false" displayname="pdfbox.cfc"  {
   }
 
   /**
+  * @hint Attempts to remove all javascript from the pdf. Javascript can appear in a lot of places; this tackles the standard locations. If more are found, they'll be incorporated here.
+  */
+  public any function removeJavaScript() {
+
+    removeEmbeddedJavaScript();
+
+    removeDocumentJavaScriptActions();
+
+    removeFormFieldActions();
+
+    return this;
+  }
+
+  /**
+  * @hint Removes the javascript embedded in the document itself
+  */
+  public any function removeEmbeddedJavaScript() {
+    var documentTree = createObject( 'java', 'org.apache.pdfbox.pdmodel.PDDocumentNameDictionary' ).init( variables.pdf.getDocumentCatalog() );
+    var jsTreeNode = documentTree.getJavaScript();
+    jsTreeNode.getCOSObject().clear();
+    return this;
+  }
+
+  /**
+  * https://pdfbox.apache.org/docs/2.0.8/javadocs/org/apache/pdfbox/pdmodel/interactive/action/PDDocumentCatalogAdditionalActions.html
+  * @hint Removes the actions that can be triggered on open, before close, before/after printing, and before/after saving
+  */
+  public any function removeDocumentJavaScriptActions() {
+
+    var catalog = variables.pdf.getDocumentCatalog();
+    catalog.setOpenAction( javaCast( 'null', '' ) );
+
+    var actions = catalog.getActions();
+    actions.setDP( javaCast( 'null', '' ) );
+    actions.setDS( javaCast( 'null', '' ) );
+    actions.setWC( javaCast( 'null', '' ) );
+    actions.setWP( javaCast( 'null', '' ) );
+    actions.setWS( javaCast( 'null', '' ) );
+
+    return this;
+  }
+
+  /**
+  * https://pdfbox.apache.org/docs/2.0.8/javadocs/org/apache/pdfbox/pdmodel/interactive/action/PDFormFieldAdditionalActions.html
+  * @hint removes actions embedded in the form fields ( triggered onFocus, onBlur, etc )
+  */
+  public any function removeFormFieldActions() {
+    var PDAcroForm = variables.pdf.getDocumentCatalog().getAcroForm();
+
+    if ( !isNull( PDAcroForm ) ) {
+      var iterator = PDAcroForm.getFieldIterator();
+
+      while( iterator.hasNext() ) {
+        var formField = iterator.next();
+        var formFieldActions = formField.getActions();
+
+        if ( !isNull( formFieldActions ) ) {
+          formFieldActions.getCOSObject().clear();
+        }
+
+      }
+
+    }
+
+    return this;
+  }
+
+  /**
   * @hint By default, the file is saved to the same path that it was loaded from.
   *
   * Note that saving the document also automatically closes the instance of the PDDocument that was created, so it should be the last thing you do with this object.
