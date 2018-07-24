@@ -21,6 +21,24 @@ component output="false" displayname="pdfbox.cfc"  {
   }
 
   /**
+  * https://pdfbox.apache.org/docs/2.0.8/javadocs/org/apache/pdfbox/text/PDFTextStripper.html
+  * @hint returns the text extracted from the pdf document.
+  */
+  public any function getText() {
+    var stripper = createObject( 'java', 'org.apache.pdfbox.text.PDFTextStripper' ).init();
+    return stripper.getText( variables.pdf );
+  }
+
+  /**
+  * https://pdfbox.apache.org/docs/2.0.8/javadocs/org/apache/pdfbox/tools/PDFText2HTML.html
+  * @hint returns the text extracted from the pdf, wrapped in simple html
+  */
+  public any function getTextAsHtml() {
+    var stripper = stripper = createObject( 'java', 'org.apache.pdfbox.tools.PDFText2HTML' ).init();
+    return stripper.getText( variables.pdf );
+  }
+
+  /**
   * https://stackoverflow.com/questions/14454387/pdfbox-how-to-flatten-a-pdf-form#19723539
   * @hint Flattens any forms on the pdf
   */
