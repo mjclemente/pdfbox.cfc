@@ -265,6 +265,20 @@ component output="false" displayname="pdfbox.cfc"  {
   }
 
   /**
+  * @hint Runs all data removal methods on the pdf. As new methods are added to the component, they'll be added here as well. Please be aware that sensitive data may remain in the pdf, even after running this method.
+  */
+  public any function sanitize() {
+    flatten()
+    .removeAnnotations()
+    .removeEmbeddedFiles()
+    .removeJavaScript()
+    .removeEmbeddedIndex()
+    .removeMetaData();
+
+    return this;
+  }
+
+  /**
   * @hint By default, the file is saved to the same path that it was loaded from.
   *
   * Note that saving the document also automatically closes the instance of the PDDocument that was created, so it should be the last thing you do with this object.
