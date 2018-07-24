@@ -109,7 +109,8 @@ component output="false" displayname="pdfbox.cfc"  {
   public any function removeEmbeddedFiles() {
     var documentTree = createObject( 'java', 'org.apache.pdfbox.pdmodel.PDDocumentNameDictionary' ).init( variables.pdf.getDocumentCatalog() );
     var fileTreeNode = documentTree.getEmbeddedFiles();
-    fileTreeNode.getCOSObject().clear();
+    if ( !isNull( fileTreeNode ) )
+      fileTreeNode.getCOSObject().clear();
     return this;
   }
 
@@ -135,7 +136,8 @@ component output="false" displayname="pdfbox.cfc"  {
   public any function removeEmbeddedJavaScript() {
     var documentTree = createObject( 'java', 'org.apache.pdfbox.pdmodel.PDDocumentNameDictionary' ).init( variables.pdf.getDocumentCatalog() );
     var jsTreeNode = documentTree.getJavaScript();
-    jsTreeNode.getCOSObject().clear();
+    if ( !isNull( jsTreeNode ) )
+      jsTreeNode.getCOSObject().clear();
     return this;
   }
 
