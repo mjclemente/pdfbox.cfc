@@ -233,6 +233,18 @@ component output="false" displayname="pdfbox.cfc"  {
   }
 
   /**
+  * https://lists.apache.org/thread.html/801ea985610d3adf51cb69103729797af3a745a9364bc3f442f80384@%3Cusers.pdfbox.apache.org%3E
+  * @hint If there is an embedded search index, this removes it (at least instances of an embedded searches that I've seen)
+  */
+  public any function removeEmbeddedIndex() {
+    var searchIndex = variables.pdf.getDocumentCatalog().getCOSObject().getItem( "PieceInfo" );
+    if ( !isNull( searchIndex ) )
+      searchIndex.clear();
+
+    return this;
+  }
+
+  /**
   * @hint By default, the file is saved to the same path that it was loaded from.
   *
   * Note that saving the document also automatically closes the instance of the PDDocument that was created, so it should be the last thing you do with this object.
