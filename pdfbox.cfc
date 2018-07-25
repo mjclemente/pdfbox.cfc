@@ -279,6 +279,41 @@ component output="false" displayname="pdfbox.cfc"  {
   }
 
   /**
+  * @hint Add a page or pages to the end of the pdf.
+  * @pdfPages must be either the absolute path to a pdf file on disk, or a coldfusion pdf object
+  */
+  public any function addPages( required any pdfPages ) {
+    var reader = getPDDocument();
+
+    if ( isSimpleValue( pdfPages ) && fileExists( pdfPages ) && fileGetMimeType( pdfPages ) == 'application/pdf' ) {
+
+      var tempPdf = reader.load( getFileInputStream( pdfPages ) );
+
+    } else if ( isPDFObject( pdfPages ) ) {
+
+      var tempPdf = reader.load( pdfPages );
+
+    } else {
+
+      reader.close();
+      throw( 'The argument passed to #getFunctionCalledName()# is not valid. It should either be the absolute path to a valid pdf file, or ColdFusion pdf object.' );
+    }
+
+    var pages = tempPdf.getPages();
+
+    var iterator = pages.iterator();
+
+    while ( iterator.hasNext() ) {
+      var page = iterator.next();
+      variables.pdf.addPage( page );
+    }
+
+    reader.close();
+
+    return this;
+  }
+
+  /**
   * @hint By default, the file is saved to the same path that it was loaded from.
   *
   * Note that saving the document also automatically closes the instance of the PDDocument that was created, so it should be the last thing you do with this object.
