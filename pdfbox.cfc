@@ -39,6 +39,30 @@ component output="false" displayname="pdfbox.cfc"  {
   }
 
   /**
+  * https://www.compoundtheory.com/using-a-java-io-bufferedreader-in-coldfusion/
+  * @hint
+  */
+  public any function getTitle() {
+    var catalog = variables.pdf.getDocumentCatalog();
+
+    var blah = createObject( 'java', 'java.io.BufferedReader' ).init( createObject( 'java', 'java.io.InputStreamReader' ).init( catalog.getMetadata().createInputStream() ) );
+    var str = '';
+    do {
+      var line = blah.readLine();
+      var lineExists = !isNull( line );
+      if ( lineExists ) {
+        str &= line;
+      }
+    } while ( lineExists );
+
+    if ( isXml( str ) ) {
+      xml = xmlParse( str );
+    }
+
+    return xml['x:xmpmeta']['rdf:RDF']['rdf:Description']['dc:format'];
+  }
+
+  /**
   * https://stackoverflow.com/questions/14454387/pdfbox-how-to-flatten-a-pdf-form#19723539
   * @hint Flattens any forms on the pdf
   */
