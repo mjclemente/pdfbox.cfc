@@ -12,6 +12,7 @@ component output="false" displayname="pdfbox.cfc"  {
   public any function init( required string src ) {
 
     variables.src = src;
+    variables.hasMetadata = true;
 
     var fileInputStream = getFileInputStream( src );
     var reader = getPDDocument();
@@ -250,6 +251,8 @@ component output="false" displayname="pdfbox.cfc"  {
     var metadataStream = createObject( 'java', 'org.apache.pdfbox.pdmodel.common.PDMetadata' ).init( variables.pdf );
     metadataStream.importXMPMetadata( baos.toByteArray() );
     variables.pdf.getDocumentCatalog().setMetadata( metadataStream );
+
+    variables.hasMetadata = false;
 
     return this;
   }
