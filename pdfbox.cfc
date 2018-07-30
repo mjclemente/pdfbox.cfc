@@ -26,6 +26,7 @@ component output="false" displayname="pdfbox.cfc"  {
   */
   public any function getText() {
     var stripper = createObject( 'java', 'org.apache.pdfbox.text.PDFTextStripper' ).init();
+    stripper.setSortByPosition( true );
     return stripper.getText( variables.pdf );
   }
 
