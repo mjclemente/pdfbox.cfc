@@ -42,6 +42,7 @@ component output="false" displayname="pdfbox.cfc"  {
   /**
   * https://stackoverflow.com/questions/14454387/pdfbox-how-to-flatten-a-pdf-form#19723539
   * @hint Flattens any forms on the pdf
+  * Note that data in XFA forms is not visible after this process. Chrome/Firefox/Safari/Preview no longer support XFA PDFs; the format seems to be on its way out and is only supported by Adobe (via Acrobat) and IE. Adobe ColdFusion does not allow cfpdf's 'sanitize' action on PDFs with XFA content.
   */
   public any function flatten() {
 
