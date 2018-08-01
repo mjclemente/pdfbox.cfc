@@ -5,7 +5,9 @@ _This is an early stage project. Feel free to use the issue tracker to report bu
 
 __Why not just use `cfpdf` and `cfdocument`?__
 
-PDFBox's performance is generally faster that CFML's built in functions, p
+CFML's built in methods have their place - if they work for you, keep using them.
+
+PDFBox's performance is generally faster that CFML's built in functions, particularly for extracting text. It provides more fine-grained control and insight into the underlying structures and data that make up a PDF (forms, links, javascript, metadata, etc.). Some PDF functionality is restricted to certain ColdFusion versions and engines, while PDFBox functions the same across engines and versions, providing flexibility in a codebase.
 
 ## Table of Contents
 
