@@ -293,7 +293,7 @@ component output="false" displayname="pdfbox.cfc"  {
   */
   public any function removeEmbeddedIndex() {
     var searchIndex = variables.pdf.getDocumentCatalog().getCOSObject().getItem( "PieceInfo" );
-    if ( !isNull( searchIndex ) )
+    if ( !isNull( searchIndex ) && structKeyExists( searchIndex, 'clear' ) )
       searchIndex.clear();
 
     return this;
