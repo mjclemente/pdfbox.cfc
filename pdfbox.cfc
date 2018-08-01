@@ -18,6 +18,8 @@ component output="false" displayname="pdfbox.cfc"  {
     var reader = getPDDocument();
     variables.pdf = reader.load( fileInputStream );
 
+    variables.additionalDocuments = [];
+
     return this;
   }
 
@@ -339,9 +341,11 @@ component output="false" displayname="pdfbox.cfc"  {
     while ( iterator.hasNext() ) {
       var page = iterator.next();
       variables.pdf.addPage( page );
+
     }
 
-    reader.close();
+    //save it to the array for closing later
+    variables.additionalDocuments.append( tempPdf );
 
     return this;
   }
@@ -371,6 +375,11 @@ component output="false" displayname="pdfbox.cfc"  {
   */
   public void function close() {
     variables.pdf.close();
+
+    for ( var tempPdf in variables.additionalDocuments ) {
+      tempPdf.close();
+    }
+    variables.additionalDocuments = [];
   }
 
   private any function getFileInputStream( required string src ) {
