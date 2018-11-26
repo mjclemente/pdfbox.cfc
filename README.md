@@ -19,7 +19,7 @@ PDFBox's performance is generally faster that CFML's built in functions, particu
 - [Contributing](#contributing)
 
 ### Getting Started
-Instances of `pdfbox.cfc` are created by passing it the absolute path to a PDF document; the component then provides methods for working with that PDF. It's not a singleton, so it shouldn't be stored in a permanent scope; you need to instantiate `pdfbox.cfc` for each PDF you're working with.
+Instances of `pdfbox.cfc` are created by passing it the absolute path to a PDF document or a PDF file input stream; the component then provides methods for working with that PDF. It's not a singleton, so it shouldn't be stored in a permanent scope; you need to instantiate `pdfbox.cfc` for each PDF you're working with.
 
 ```cfc
 pdf = new pdfbox( src = 'absolute/path/to/pdf' );
@@ -91,7 +91,7 @@ Modeled after `cfpdf`'s "sanitize" action, this runs all data removal methods on
 Add a page or pages to the end of the PDF. The `pdfPages` argument must be either the absolute path to a pdf file on disk, or a ColdFusion PDF object like those created via `cfdocument`.
 
 #### `save( string dest = "" )`
-By default, this saves the PDF to the same path that it was loaded from. You can use the `dest` argument to save the modified PDF to a new location. If the destination does not exist, it is created automatically.
+By default, this saves the PDF to the same path that it was loaded from. You can use the `dest` argument to save the modified PDF to a new location. If the destination does not exist, it is created automatically. Note that the `dest` argument is required in order to save PDFs loaded from file input streams.
 
 __Note__: For convenience, saving the document also automatically closes the PDFBox instance that was created, so it should be the last thing you do with this object.
 
