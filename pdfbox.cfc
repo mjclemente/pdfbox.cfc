@@ -7,14 +7,20 @@ component output="false" displayname="pdfbox.cfc"  {
 
   /**
   * @hint
-  * @src must be the absolute path to an on-disk pdf file
+  * @src must be the absolute path to an on-disk pdf file or a file input stream
   */
-  public any function init( required string src ) {
+  public any function init( required any src ) {
 
-    variables.src = src;
+    variables.src = isSimpleValue( src )
+      ? src
+      : '';
+
     variables.hasMetadata = true;
 
-    var fileInputStream = getFileInputStream( src );
+    var fileInputStream = isSimpleValue( src )
+    ? getFileInputStream( src )
+    : src;
+
     var reader = getPDDocument();
     variables.pdf = reader.load( fileInputStream );
 
@@ -366,7 +372,11 @@ component output="false" displayname="pdfbox.cfc"  {
         directoryCreate( directory );
     }
 
+    if ( !dest.len() && !variables.src.len() )
+      throw( 'You must provide a destination in order to save a pdf file input stream.' );
+
     variables.pdf.save( dest.len() ? dest : variables.src );
+
     close();
   }
 
