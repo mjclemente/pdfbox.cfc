@@ -41,6 +41,9 @@ pdf.save( expandPath( "./output/flattened.pdf" ) );
 #### `getText()`
 Returns the text extracted from the PDF document.
 
+#### `getPageText( required numeric startpage, numeric endpage = 0 )`
+Returns the text extracted from specific pages of the pdf document. The `endpage` argument defaults to the same as the `startpage` if not provided.
+
 #### `getTextAsHtml()`
 Returns the text extracted from the PDF, wrapped in simple html. The underlying class used is [PDFText2HTML](https://pdfbox.apache.org/docs/2.0.8/javadocs/org/apache/pdfbox/tools/PDFText2HTML.html).
 
@@ -96,6 +99,9 @@ __Note__: For convenience, saving the document also automatically closes the PDF
 
 #### `close()`
 PDFBox instances that opened also need to be closed. While calling `save()` will close them automatically, if you're just extracting data from a PDF, it's preferable to just manually close it using this method.
+
+#### Other Methods Not Mentioned Here
+For methods not explicity provided, this project uses `onMissingMethod()` to invoke the underlying PDFBox library class for `PDDocument`, which is its in-memory representation of the PDF document, documented [here](https://pdfbox.apache.org/docs/2.0.13/javadocs/org/apache/pdfbox/pdmodel/PDDocument.html). Consequently, you can utilize some of the methods provided by PDFBox directly. For example, `pdfbox.getNumberOfPages()` will return the number of pages the document has; it does this by delegating to the [`getNumberOfPages()`](https://pdfbox.apache.org/docs/2.0.13/javadocs/org/apache/pdfbox/pdmodel/PDDocument.html#getNumberOfPages--) method in the `PDDocument` class.
 
 ### Requirements
 
