@@ -1,4 +1,4 @@
-# pdfbox.cfc
+# pdfbox.cfc <!-- omit in toc -->
 Utilize the PDFBox Java library to manipulate PDFs with CFML.
 
 _This is an early stage project. Feel free to use the issue tracker to report bugs or suggest improvements._
@@ -9,16 +9,15 @@ CFML's built in methods have their place - if they work for you, keep using them
 
 PDFBox's performance is generally faster that CFML's built in functions, particularly for extracting text. It provides more fine-grained control and insight into the underlying structures and data that make up a PDF (forms, links, javascript, metadata, etc.). Some PDF functionality is restricted to certain ColdFusion versions and engines, while PDFBox functions the same across engines and versions, providing flexibility in a codebase.
 
-## Table of Contents
-
+## Table of Contents <!-- omit in toc -->
 - [Getting Started](#getting-started)
-- [Reference Manual](#reference-manual)
-- [Requirements](#requirements)
-- [Disclaimer](#disclaimer)
+  - [Reference Manual](#reference-manual)
+  - [Requirements](#requirements)
+  - [Disclaimer](#disclaimer)
 - [Questions](#questions)
 - [Contributing](#contributing)
 
-### Getting Started
+## Getting Started
 Instances of `pdfbox.cfc` are created by passing it the absolute path to a PDF document or a PDF file input stream; the component then provides methods for working with that PDF. It's not a singleton, so it shouldn't be stored in a permanent scope; you need to instantiate `pdfbox.cfc` for each PDF you're working with.
 
 ```cfc
