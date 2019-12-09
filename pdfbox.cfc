@@ -40,6 +40,23 @@ component output="false" displayname="pdfbox.cfc"  {
   }
 
   /**
+  * https://pdfbox.apache.org/docs/2.0.8/javadocs/org/apache/pdfbox/text/PDFTextStripper.html
+  * @hint returns the text extracted from specific pages of the pdf document.
+  */
+  public any function getPageText( required numeric startpage, numeric endpage = 0 ) {
+    var stripper = createObject( 'java', 'org.apache.pdfbox.text.PDFTextStripper' ).init();
+    stripper.setSortByPosition( true );
+    stripper.setStartPage( startpage );
+    if( endpage ){
+      stripper.setEndPage( endpage );
+    } else {
+      stripper.setEndPage( startpage );
+    }
+
+    return stripper.getText( variables.pdf );
+  }
+
+  /**
   * https://pdfbox.apache.org/docs/2.0.8/javadocs/org/apache/pdfbox/tools/PDFText2HTML.html
   * @hint returns the text extracted from the pdf, wrapped in simple html
   */
