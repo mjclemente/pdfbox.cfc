@@ -419,4 +419,18 @@ component output="false" displayname="pdfbox.cfc"  {
     return createObject( 'java', 'org.apache.pdfbox.pdmodel.PDDocument' );
   }
 
+  public any function onMissingMethod( missingMethodName, missingMethodArguments ) {
+    var methodArguments = [];
+    for ( var index in missingMethodArguments ) {
+      methodArguments.append( missingMethodArguments[ index ] );
+    }
+    try {
+      var result = invoke( variables.pdf, missingMethodName, methodArguments );
+    } catch ( any e ) {
+      result = e;
+    }
+
+    return result;
+  }
+
 }
