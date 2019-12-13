@@ -430,7 +430,9 @@ component output="false" displayname="pdfbox.cfc"  {
       result = e;
     }
 
-    return result;
+    if( !isNull( result ) ){
+      return result;
+    }
   }
 
 }
