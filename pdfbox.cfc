@@ -10,7 +10,7 @@ component output="false" displayname="pdfbox.cfc"  {
   * @src must be the absolute path to an on-disk pdf file or a file input stream
   */
   public any function init( required any src ) {
-
+    variables.serverVersion = server.keyExists( 'lucee' ) ? 'Lucee' : 'ColdFusion';
     variables.src = isSimpleValue( src )
       ? src
       : '';
