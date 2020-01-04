@@ -416,7 +416,11 @@ component output="false" displayname="pdfbox.cfc"  {
   }
 
   private any function getPDDocument() {
-    return createObject( 'java', 'org.apache.pdfbox.pdmodel.PDDocument' );
+    if( serverVersion == 'lucee' ){
+      return createObject( 'java', 'org.apache.pdfbox.pdmodel.PDDocument', "org.apache.pdfbox.app" );
+    } else {
+      return createObject( 'java', 'org.apache.pdfbox.pdmodel.PDDocument' );
+    }
   }
 
   public any function onMissingMethod( missingMethodName, missingMethodArguments ) {
