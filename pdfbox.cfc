@@ -8,9 +8,17 @@ component output="false" displayname="pdfbox.cfc"  {
   /**
   * @hint
   * @src must be the absolute path to an on-disk pdf file or a file input stream
+  * @classPath a Lucee specific option; provide the path to a directory containing the PDFBox class files.
   */
-  public any function init( required any src ) {
+  public any function init( required any src, string classPath = '' ) {
     variables.serverVersion = server.keyExists( 'lucee' ) ? 'Lucee' : 'ColdFusion';
+
+    if ( variables.serverVersion != 'Lucee' && len( arguments.classPath ) ) {
+      throw( 'Sorry, the option to provide a class path to the PDFBox jars is only available with Lucee CFML.' );
+    }
+
+    variables.classPath = arguments.classPath;
+
     variables.src = isSimpleValue( src )
       ? src
       : '';
