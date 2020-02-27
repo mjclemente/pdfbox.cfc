@@ -42,7 +42,7 @@ component output="false" displayname="pdfbox.cfc"  {
   * @hint returns the text extracted from the pdf document.
   */
   public any function getText() {
-    var stripper = createObject( 'java', 'org.apache.pdfbox.text.PDFTextStripper' ).init();
+    var stripper = createObjectHelper( 'org.apache.pdfbox.text.PDFTextStripper' ).init();
     stripper.setSortByPosition( true );
     return stripper.getText( variables.pdf );
   }
@@ -52,7 +52,7 @@ component output="false" displayname="pdfbox.cfc"  {
   * @hint returns the text extracted from specific pages of the pdf document.
   */
   public any function getPageText( required numeric startpage, numeric endpage = 0 ) {
-    var stripper = createObject( 'java', 'org.apache.pdfbox.text.PDFTextStripper' ).init();
+    var stripper = createObjectHelper( 'org.apache.pdfbox.text.PDFTextStripper' ).init();
     stripper.setSortByPosition( true );
     stripper.setStartPage( startpage );
     if( endpage ){
@@ -69,7 +69,7 @@ component output="false" displayname="pdfbox.cfc"  {
   * @hint returns the text extracted from the pdf, wrapped in simple html
   */
   public any function getTextAsHtml() {
-    var stripper = stripper = createObject( 'java', 'org.apache.pdfbox.tools.PDFText2HTML' ).init();
+    var stripper = createObjectHelper( 'org.apache.pdfbox.tools.PDFText2HTML' ).init();
     return stripper.getText( variables.pdf );
   }
 
@@ -85,16 +85,16 @@ component output="false" displayname="pdfbox.cfc"  {
     var documentInfo = variables.pdf.getDocumentInformation();
     documentInfo.setTitle( title );
 
-    var XMPMetadata = createObject( 'java', 'org.apache.xmpbox.XMPMetadata' );
+    var XMPMetadata = createObjectHelper( 'org.apache.xmpbox.XMPMetadata' );
     var metadata = XMPMetadata.createXMPMetadata();
 
     var dcSchema = metadata.createAndAddDublinCoreSchema();
     dcSchema.setTitle( title );
 
-    var serializer = createObject( 'java', 'org.apache.xmpbox.xml.XmpSerializer' );
+    var serializer = createObjectHelper( 'org.apache.xmpbox.xml.XmpSerializer' );
     var baos = createObject( 'java', 'java.io.ByteArrayOutputStream' ).init();
     serializer.serialize( metadata, baos, true );
-    var metadataStream = createObject( 'java', 'org.apache.pdfbox.pdmodel.common.PDMetadata' ).init( variables.pdf );
+    var metadataStream = createObjectHelper( 'org.apache.pdfbox.pdmodel.common.PDMetadata' ).init( variables.pdf );
     metadataStream.importXMPMetadata( baos.toByteArray() );
     variables.pdf.getDocumentCatalog().setMetadata( metadataStream );
 
@@ -171,7 +171,7 @@ component output="false" displayname="pdfbox.cfc"  {
   * @hint Removes embedded files
   */
   public any function removeEmbeddedFiles() {
-    var documentTree = createObject( 'java', 'org.apache.pdfbox.pdmodel.PDDocumentNameDictionary' ).init( variables.pdf.getDocumentCatalog() );
+    var documentTree = createObjectHelper( 'org.apache.pdfbox.pdmodel.PDDocumentNameDictionary' ).init( variables.pdf.getDocumentCatalog() );
     var fileTreeNode = documentTree.getEmbeddedFiles();
     if ( !isNull( fileTreeNode ) )
       fileTreeNode.getCOSObject().clear();
@@ -198,7 +198,7 @@ component output="false" displayname="pdfbox.cfc"  {
   * @hint Removes the javascript embedded in the document itself
   */
   public any function removeEmbeddedJavaScript() {
-    var documentTree = createObject( 'java', 'org.apache.pdfbox.pdmodel.PDDocumentNameDictionary' ).init( variables.pdf.getDocumentCatalog() );
+    var documentTree = createObjectHelper( 'org.apache.pdfbox.pdmodel.PDDocumentNameDictionary' ).init( variables.pdf.getDocumentCatalog() );
     var jsTreeNode = documentTree.getJavaScript();
     if ( !isNull( jsTreeNode ) )
       jsTreeNode.getCOSObject().clear();
@@ -303,13 +303,13 @@ component output="false" displayname="pdfbox.cfc"  {
     documentInfo.setTitle( javaCast( 'null', '' ) );
     documentInfo.setTrapped( javaCast( 'null', '' ) );
 
-    var XMPMetadata = createObject( 'java', 'org.apache.xmpbox.XMPMetadata' );
+    var XMPMetadata = createObjectHelper( 'org.apache.xmpbox.XMPMetadata' );
     var metadata = XMPMetadata.createXMPMetadata();
 
-    var serializer = createObject( 'java', 'org.apache.xmpbox.xml.XmpSerializer' );
+    var serializer = createObjectHelper( 'org.apache.xmpbox.xml.XmpSerializer' );
     var baos = createObject( 'java', 'java.io.ByteArrayOutputStream' ).init();
     serializer.serialize( metadata, baos, true );
-    var metadataStream = createObject( 'java', 'org.apache.pdfbox.pdmodel.common.PDMetadata' ).init( variables.pdf );
+    var metadataStream = createObjectHelper( 'org.apache.pdfbox.pdmodel.common.PDMetadata' ).init( variables.pdf );
     metadataStream.importXMPMetadata( baos.toByteArray() );
     variables.pdf.getDocumentCatalog().setMetadata( metadataStream );
 
@@ -423,12 +423,36 @@ component output="false" displayname="pdfbox.cfc"  {
     );
   }
 
+  /**
+  * @hint Broken out so that, when using Lucee, we can differentiate between project and Lucee PDFBox versions
+  */
   private any function getPDDocument() {
-    if( serverVersion == 'lucee' ){
+    // if a class pass is not provided, we need to override Lucee PDFBox version
+    if( serverVersion == 'Lucee' && !hasClassPath() ) {
       return createObject( 'java', 'org.apache.pdfbox.pdmodel.PDDocument', "org.apache.pdfbox.app" );
     } else {
-      return createObject( 'java', 'org.apache.pdfbox.pdmodel.PDDocument' );
+      // just use the main helper if ACF or a class path is provided for lucee
+      return createObjectHelper( 'org.apache.pdfbox.pdmodel.PDDocument' );
     }
+  }
+
+  /**
+  * @hint Enables us to pass a specific class path when using Lucee
+  */
+  private any function createObjectHelper( required string classname ){
+    if( hasClassPath() ) {
+      return createObject(
+        'java',
+        classname,
+        directoryList( expandPath( variables.classPath ), true, "path", "", "", 'file' )
+      );
+    } else {
+      return createObject( 'java', classname );
+    }
+  }
+
+  private boolean function hasClassPath() {
+    return len( variables.classPath );
   }
 
   public any function onMissingMethod( missingMethodName, missingMethodArguments ) {
