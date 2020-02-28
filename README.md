@@ -118,6 +118,21 @@ There are two ways that you can include them in your project.
   	};
 	```
 
+#### Lucee CFML Specific Jar Option
+
+When using `pdfbox.cfc` with Lucee CFML, you have the option to provide the directory that contains the PDFBox .jar files when initializing the object:
+
+```cfc
+  classpath = expandPath( "/path/to/pdfbox/jars" );
+
+  // will use the PDFBox jars in the class path provided
+  pdf = new pdfbox( src = 'absolute/path/to/pdf', classpath );
+```
+
+This can be helpful if you want to avoid using `this.javaSettings` (for example, because of [LDEV-2516](https://luceeserver.atlassian.net/browse/LDEV-2516)).
+
+To be clear, this approach 1) is not possible with Adobe ColdFusion, 2) is not required for Lucee, and 3) when used with Lucee, means that you do *not* need to add the .jars to your `<cf_root>/lib` directory or `this.javasettings`.
+
 ### Disclaimer
 PDFs can be suprisingly complex; the [spec for the PDF document format](https://www.adobe.com/content/dam/acom/en/devnet/acrobat/pdfs/pdf_reference_1-7.pdf) available online is, no joke, 1,300 pages. While I've browsed it, I am not an expert. As a consequence, you should verify that this component doing what you expect, particularly when it comes to the data sanitization methods. Metadata, javascript, and other functionality and information can be encoded in a range of places within a PDF. As I learn about and encounter examples of these, I'm happy to address them with this component, insofar as it's possible with the underlying PDFBox library.
 
