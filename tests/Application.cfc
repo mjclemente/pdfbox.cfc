@@ -14,9 +14,14 @@ component {
   this.mappings["/testbox"] = rootPath & "/testbox";
 
   this.javaSettings = {
-    loadPaths              : directoryList(this.mappings["/pdfbox"] & "/lib", true, "array", "*jar"),
+    loadPaths: directoryList(
+      this.mappings["/pdfbox"] & "/lib",
+      true,
+      "array",
+      "*jar"
+    ),
     loadColdFusionClassPath: true,
-    reloadOnChange         : false,
+    reloadOnChange         : false
   };
 
 }
