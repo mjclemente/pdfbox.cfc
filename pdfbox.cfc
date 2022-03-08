@@ -44,7 +44,15 @@ component output="false" displayname="pdfbox.cfc"  {
   public any function getText() {
     var stripper = createObjectHelper( 'org.apache.pdfbox.text.PDFTextStripper' ).init();
     stripper.setSortByPosition( true );
-    return stripper.getText( variables.pdf );
+
+    // https://github.com/mjclemente/pdfbox.cfc/issues/2
+    try {
+      return stripper.getText( variables.pdf );
+    } catch( any e ){
+       var stderr = createObject( "java", "java.lang.System" ).err;
+       stderr.println( "Pdfbox.cfc cannot getText(): #e.message#" );
+      return '';
+    }
   }
 
   /**
