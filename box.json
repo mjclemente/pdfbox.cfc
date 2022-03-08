@@ -1,56 +1,52 @@
 {
-    "name":"pdfbox.cfc",
-    "version":"0.7.0",
-    "author":"Matthew Clemente <mjclemente@gmail.com>",
-    "location":"mjclemente/pdfbox.cfc#v0.7.0",
-    "homepage":"https://github.com/mjclemente/pdfbox.cfc",
-    "documentation":"https://github.com/mjclemente/pdfbox.cfc",
-    "repository":{
-        "type":"git",
-        "URL":"https://github.com/mjclemente/pdfbox.cfc"
-    },
-    "bugs":"https://github.com/mjclemente/pdfbox.cfc/issues",
-    "slug":"pdfboxcfc",
-    "shortDescription":"Utilize the PDFBox Java library to manipulate PDFs.",
-    "description":"",
-    "instructions":"",
-    "changelog":"",
-    "type":"modules",
-    "keywords":"pdfbox, pdf, java",
-    "private":false,
-    "projectURL":"",
-    "license":[
-        {
-            "type":"MIT",
-            "URL":"https://github.com/mjclemente/pdfbox.cfc/blob/master/LICENSE"
-        }
-    ],
-    "contributors":[],
-    "dependencies":{},
-    "devDependencies":{},
-    "installPaths":{},
-    "scripts":{},
-    "ignore":[
-        "**/.*",
-        "test",
-        "tests"
-    ],
-    "testbox":{
-        "runner":[
-            {
-                "default":""
-            }
-        ],
-        "labels":"",
-        "reporter":"",
-        "bundles":"",
-        "recurse":true,
-        "directory":"tests.specs",
-        "testBundles":"",
-        "testSuites":"",
-        "testSpecs":"",
-        "verbose":true,
-        "watchDelay":500,
-        "watchPaths":"**.cfc"
+  "name": "pdfbox.cfc",
+  "version": "0.7.0",
+  "author": "Matthew Clemente <mjclemente@gmail.com>",
+  "location": "mjclemente/pdfbox.cfc#v0.7.0",
+  "homepage": "https://github.com/mjclemente/pdfbox.cfc",
+  "documentation": "https://github.com/mjclemente/pdfbox.cfc",
+  "repository": {
+    "type": "git",
+    "URL": "https://github.com/mjclemente/pdfbox.cfc"
+  },
+  "bugs": "https://github.com/mjclemente/pdfbox.cfc/issues",
+  "slug": "pdfboxcfc",
+  "shortDescription": "Utilize the PDFBox Java library to manipulate PDFs.",
+  "description": "Utilize the PDFBox Java library to manipulate PDFs.",
+  "instructions": "",
+  "changelog": "https://github.com/mjclemente/pdfbox.cfc/blob/master/CHANGELOG.md",
+  "type": "modules",
+  "keywords": ["pdfbox", "pdf", "java"],
+  "private": false,
+  "projectURL": "https://github.com/mjclemente/pdfbox.cfc",
+  "license": [
+    {
+      "type": "MIT",
+      "URL": "https://github.com/mjclemente/pdfbox.cfc/blob/master/LICENSE"
     }
+  ],
+  "contributors": [],
+  "dependencies": {},
+  "devDependencies": {},
+  "installPaths": {},
+  "scripts": {},
+  "ignore": ["**/.*", "test", "tests"],
+  "testbox": {
+    "runner": [
+      {
+        "default": ""
+      }
+    ],
+    "labels": "",
+    "reporter": "",
+    "bundles": "",
+    "recurse": true,
+    "directory": "tests.specs",
+    "testBundles": "",
+    "testSuites": "",
+    "testSpecs": "",
+    "verbose": true,
+    "watchDelay": 500,
+    "watchPaths": "**.cfc"
+  }
 }
