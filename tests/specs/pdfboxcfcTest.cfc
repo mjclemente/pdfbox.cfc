@@ -43,7 +43,7 @@ component extends="testbox.system.BaseSpec" {
 
 
       describe("text extraction", function() {
-        it("can extract pdf text", function() {
+        it("can extract full pdf text", function() {
           var nl = createObject("java", "java.lang.System").getProperty("line.separator");
 
           var expected = "Friday's Child #nl#Auden #nl#In memory of Dietrich Bonhoeffer #nl# #nl#He told us we were free to choose… #nl# #nl#";
