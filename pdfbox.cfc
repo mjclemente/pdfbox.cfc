@@ -1,6 +1,6 @@
 /**
 * pdfbox.cfc
-* Copyright 2018-2020 Matthew Clemente
+* Copyright 2018-2022 Matthew Clemente
 * Licensed under MIT (https://github.com/mjclemente/pdfbox.cfc/blob/master/LICENSE)
 */
 component output="false" displayname="pdfbox.cfc"  {
