@@ -36,6 +36,11 @@ component extends="testbox.system.BaseSpec" {
         expect(pdfbox.getVersion()).toBe("2.0.19");
       });
 
+      it("can count the number of pages", function() {
+        pdfbox = new pdfbox.pdfbox(variables.pdfs.longer);
+        expect(pdfbox.getNumberOfPages()).toBe(2);
+      });
+
 
       describe("text extraction", function() {
         it("can extract pdf text", function() {
