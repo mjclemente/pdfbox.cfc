@@ -61,6 +61,15 @@ component extends="testbox.system.BaseSpec" {
           var text = pdfbox.getPageText(2);
           expect(text).toBe(expected);
         });
+        it("can extract text as html", function() {
+          pdfbox = new pdfbox.pdfbox(variables.pdfs.friday);
+
+          var text = pdfbox.getTextAsHtml();
+          expect(text).toInclude("DOCTYPE html PUBLIC");
+          expect(text).toInclude("<body>");
+          expect(text).toInclude("<p>Friday's Child #nl#Auden #nl#</p>");
+          expect(text).toInclude("</html>");
+        });
       });
     });
   }
