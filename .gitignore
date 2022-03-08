@@ -1,0 +1,7 @@
+!/lib/*
+/testbox
+/tests/results
+/node_modules
+/modules
+
+.vscode
