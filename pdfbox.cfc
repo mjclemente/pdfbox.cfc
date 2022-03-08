@@ -124,6 +124,13 @@ component output="false" displayname="pdfbox.cfc"  {
     return this;
   }
 
+  public any function listXFAElements() {
+    var PDAcroForm = variables.pdf.getDocumentCatalog().getAcroForm();
+    var documentXML = PDAcroForm.getXFA().getDocument();
+    var dataElements = documentXML.getElementsByTagName("xfa:data");
+    return dataElements;
+  }
+
   /**
   * https://pdfbox.apache.org/docs/2.0.8/javadocs/org/apache/pdfbox/pdmodel/interactive/annotation/PDAnnotation.html
   * @hint returns all annotations within the pdf as an array; the type of each object returned is PDAnnotation, so you'll need to look at the javadocs for that to see what methods are available
