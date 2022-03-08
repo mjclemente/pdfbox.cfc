@@ -37,6 +37,10 @@ component output="false" displayname="pdfbox.cfc" {
     return this;
   }
 
+  public string function getVersion() {
+    return createObjectHelper("org.apache.pdfbox.util.Version").getVersion();
+  }
+
   /**
    * https://pdfbox.apache.org/docs/2.0.8/javadocs/org/apache/pdfbox/text/PDFTextStripper.html
    * @hint returns the text extracted from the pdf document.
