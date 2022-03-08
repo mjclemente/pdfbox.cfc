@@ -11,6 +11,7 @@ component extends="testbox.system.BaseSpec" {
       "blank"  : expandPath("./resources/pdfs/blank.pdf"),
       "issue2" : expandPath("./resources/pdfs/issue2.pdf"),
       "testing": expandPath("./resources/pdfs/testing.pdf"),
+      "longer": expandPath("./resources/pdfs/longer.pdf")
     };
   }
 
