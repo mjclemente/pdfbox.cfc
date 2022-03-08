@@ -53,6 +53,14 @@ component extends="testbox.system.BaseSpec" {
           var text = pdfbox.getText();
           expect(text).toBe(expected);
         });
+        it("can extract text from a single page", function() {
+          var expected = "Anna Karenina #nl#Tolstoy #nl#Happy families are all alike; every unhappy family is unhappy in its own way. #nl#";
+
+          pdfbox = new pdfbox.pdfbox(variables.pdfs.longer);
+
+          var text = pdfbox.getPageText(2);
+          expect(text).toBe(expected);
+        });
       });
     });
   }
