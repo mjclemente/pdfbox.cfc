@@ -134,6 +134,32 @@ component extends="testbox.system.BaseSpec" {
           expect(annotions.len()).toBe(14);
           expect(final_annotations.len()).toBe(0);
         });
+        it("can remove metadata", function() {
+          initial_pdfbox = new pdfbox.pdfbox(variables.pdfs.testing);
+          // metadata
+          var doc_info = initial_pdfbox.getDocumentInformation();
+
+          expect(doc_info.getTitle()).toBe("I'm for Testing");
+          expect(doc_info.getAuthor()).toBe("Test Author Name");
+          expect(doc_info.getCreationDate().get(doc_info.getCreationDate().YEAR)).toBe("2018");
+          expect(doc_info.getModificationDate().get(doc_info.getModificationDate().YEAR)).toBe("2018");
+          expect(doc_info.getProducer()).toBe("Acrobat Pro DC 18.11.20055");
+
+          initial_pdfbox.removeMetaData();
+
+          var destination = expandPath( "#tmpDir#withoutmetadata-#getFileFromPath(variables.pdfs.testing)#" );
+          initial_pdfbox.save( destination );
+
+          pdfbox = new pdfbox.pdfbox(destination);
+
+          var final_doc_info = pdfbox.getDocumentInformation();
+
+          expect(final_doc_info.getTitle()).toBeNull();
+          expect(final_doc_info.getAuthor()).toBeNull();
+          expect(final_doc_info.getCreationDate()).toBeNull();
+          expect(final_doc_info.getModificationDate()).toBeNull();
+          expect(final_doc_info.getProducer()).toBeNull();
+        });
       });
 
 
