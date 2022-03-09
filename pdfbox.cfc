@@ -342,6 +342,24 @@ component output="false" displayname="pdfbox.cfc" {
   }
 
   /**
+  * Useful for inspecting structure: https://pdfux.com/inspect-pdf/
+  * This is based on the search indexes that I've seen and may not locate them all. Would be happy to see other examples
+  */
+  public boolean function hasEmbeddedSearchIndex() {
+    var searchIndex = variables.pdf
+      .getDocumentCatalog()
+      .getCOSObject()
+      .getItem("PieceInfo");
+    if( isNull( searchIndex ) ){
+      return false;
+    }
+
+    var indexName = createObjectHelper("org.apache.pdfbox.cos.COSName").getPDFName("SearchIndex");
+    var indexObject = searchIndex.getItem(indexName);
+    return !isNull( indexObject );
+  }
+
+  /**
    * https://lists.apache.org/thread.html/801ea985610d3adf51cb69103729797af3a745a9364bc3f442f80384@%3Cusers.pdfbox.apache.org%3E
    * @hint If there is an embedded search index, this removes it (at least instances of an embedded searches that I've seen)
    */
