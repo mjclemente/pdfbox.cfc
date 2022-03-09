@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.5.0] - 2022-03-09
+
+### Added
+
+- Methods `getEmbeddedFiles()`, `hasEmbeddedSearchIndex()`, `getDocumentOutlineTitles()`, and `removeBookmarks()`
+- More tests
+
+### Changed
+
+- Updated from PDFBox 2.0.19 to 2.0.25
+- `sanitize()` now also removes the document outline (bookmarks)
+
 ## [1.1.0] - 2022-03-09
 
 ### Added
