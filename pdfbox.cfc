@@ -517,7 +517,16 @@ component output="false" displayname="pdfbox.cfc" {
         )
       );
     } else {
-      return createObject("java", classname);
+      if( variables.serverVersion == "ColdFusion" ){
+        return createObject("java", classname);
+      } else {
+        // use the symbolic name when loading pdfbox jars, to try to prevent collisions
+        if( classname.findnocase("pdfbox")){
+          return createObject("java", classname, "org.apache.pdfbox.app");
+        } else {
+          return createObject("java", classname );
+        }
+      }
     }
   }
 
