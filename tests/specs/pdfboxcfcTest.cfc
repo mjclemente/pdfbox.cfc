@@ -186,6 +186,34 @@ component extends="testbox.system.BaseSpec" {
 
           expect(final_hasEmbeddedIndex).toBeFalse();
         });
+        it("can return document outline titles", function() {
+          pdfbox = new pdfbox.pdfbox(variables.pdfs.testing);
+
+          var outline = pdfBox.getDocumentOutlineTitles();
+          expect(outline.len()).toBe(2);
+        });
+        it("does not return outline titles when there is no outline", function() {
+          pdfbox = new pdfbox.pdfbox(variables.pdfs.friday);
+
+          var outline = pdfBox.getDocumentOutlineTitles();
+          expect(outline.len()).toBe(0);
+        });
+        it("can remove the document outline (bookmarks)", function() {
+          initial_pdfbox = new pdfbox.pdfbox(variables.pdfs.testing);
+          var outline = initial_pdfbox.getDocumentOutlineTitles();
+
+          expect(outline.len()).toBe(2);
+
+          initial_pdfbox.removeBookmarks();
+
+          var destination = expandPath( "#tmpDir#withoutbookmarks-#getFileFromPath(variables.pdfs.testing)#" );
+          initial_pdfbox.save( destination );
+
+          pdfbox = new pdfbox.pdfbox(destination);
+          var final_outline = pdfbox.getDocumentOutlineTitles();
+
+          expect(final_outline.len()).toBe(0);
+        });
         it("can remove metadata", function() {
           initial_pdfbox = new pdfbox.pdfbox(variables.pdfs.testing);
           // metadata
