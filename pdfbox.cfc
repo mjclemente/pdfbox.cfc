@@ -201,9 +201,8 @@ component output="false" displayname="pdfbox.cfc" {
    * @hint Removes embedded files
    */
   public any function removeEmbeddedFiles() {
-    var documentTree = createObjectHelper("org.apache.pdfbox.pdmodel.PDDocumentNameDictionary").init(
-      variables.pdf.getDocumentCatalog()
-    );
+    var catalog = variables.pdf.getDocumentCatalog();
+    var documentTree = catalog.getNames();
     var fileTreeNode = documentTree.getEmbeddedFiles();
     if( !isNull(fileTreeNode) ) fileTreeNode.getCOSObject().clear();
     return this;
@@ -228,9 +227,8 @@ component output="false" displayname="pdfbox.cfc" {
    * @hint Removes the javascript embedded in the document itself
    */
   public any function removeEmbeddedJavaScript() {
-    var documentTree = createObjectHelper("org.apache.pdfbox.pdmodel.PDDocumentNameDictionary").init(
-      variables.pdf.getDocumentCatalog()
-    );
+    var catalog = variables.pdf.getDocumentCatalog();
+    var documentTree = catalog.getNames();
     var jsTreeNode = documentTree.getJavaScript();
     if( !isNull(jsTreeNode) ) jsTreeNode.getCOSObject().clear();
     return this;
