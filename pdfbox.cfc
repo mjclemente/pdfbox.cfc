@@ -369,7 +369,13 @@ component output="false" displayname="pdfbox.cfc" {
       .getDocumentCatalog()
       .getCOSObject()
       .getItem("PieceInfo");
-    if( !isNull(searchIndex) && structKeyExists(searchIndex, "clear") ) searchIndex.clear();
+    if( !isNull(searchIndex) && structKeyExists(searchIndex, "clear") ){
+      searchIndex.clear();
+    }
+    if( !isNull(searchIndex) ){
+      var indexName = createObjectHelper("org.apache.pdfbox.cos.COSName").getPDFName("SearchIndex");
+      searchIndex.removeItem(indexName);
+    }
 
     return this;
   }
