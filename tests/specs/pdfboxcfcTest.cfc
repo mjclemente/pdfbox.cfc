@@ -79,6 +79,14 @@ component extends="testbox.system.BaseSpec" {
           expect(text).toInclude("<p>Friday's Child #nl#Auden #nl#</p>");
           expect(text).toInclude("</html>");
         });
+        it("returns an empty string when extracting text from a defective pdf (issue ##2)", function() {
+          var expected = "";
+
+          pdfbox = new pdfbox.pdfbox(variables.pdfs.issue2);
+
+          var text = pdfbox.getText();
+          expect(text).toBe(expected);
+        });
       });
 
       describe("pdf creation", function() {
