@@ -1,6 +1,7 @@
 !/lib/*
 /testbox
 /tests/results
+/tests/resources/tmp
 /node_modules
 /modules
 
