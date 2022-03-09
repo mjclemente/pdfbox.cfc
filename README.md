@@ -86,6 +86,9 @@ Removes metadata from the document.
 #### `removeEmbeddedIndex()`
 If there is an embedded search index, this removes it (at least instances of an embedded searches that I've encountered).
 
+#### `removeBookmarks()`
+Removes the document outline (bookmarks)
+
 #### `sanitize()`
 Modeled after `cfpdf`'s "sanitize" action, this runs all data removal methods on the PDF. As new methods are added to the component, they'll be added here as well. Please be aware that I'm not a PDF expert and make no claims that this is a comprehensive sanitization. Sensitive data may remain in the PDF, even after running this method.
 
@@ -99,6 +102,22 @@ __Note__: For convenience, saving the document also automatically closes the PDF
 
 #### `close()`
 PDFBox instances that opened also need to be closed. While calling `save()` will close them automatically, if you're just extracting data from a PDF, it's preferable to just manually close it using this method.
+
+#### `getVersion()`
+Returns the version of the underlying PDFBox Java library being used.
+
+#### `getAcroForm()`
+If present, this returns the Acroform object. I haven't put this to any use yet. It's more a placeholder for future development.
+
+#### `getEmbeddedFiles()`
+If the pdf includes embedded files, this returns them as a struct.
+
+#### `hasEmbeddedSearchIndex()`
+Checks to see if an embedded search index can be found in the pdf. This includes the same disclaimer as `removeEmbeddedIndex()` - that is, it checks the places that I've seen embedded search indexes. If different search index locations are found, it will be updated.
+
+#### `getDocumentOutlineTitles()`
+Returns an array of with the titles for the document outline sections (bookmarks). I only added this to make it easier to confirm that the outline was being removed via `removeBookmarks()`
+
 
 #### Other Methods Not Mentioned Here
 For methods not explicity provided, this project uses `onMissingMethod()` to invoke the underlying PDFBox library class for `PDDocument`, which is its in-memory representation of the PDF document, documented [here](https://pdfbox.apache.org/docs/2.0.13/javadocs/org/apache/pdfbox/pdmodel/PDDocument.html). Consequently, you can utilize some of the methods provided by PDFBox directly. For example, `pdfbox.getNumberOfPages()` will return the number of pages the document has; it does this by delegating to the [`getNumberOfPages()`](https://pdfbox.apache.org/docs/2.0.13/javadocs/org/apache/pdfbox/pdmodel/PDDocument.html#getNumberOfPages--) method in the `PDDocument` class.
