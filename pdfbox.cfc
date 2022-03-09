@@ -409,7 +409,8 @@ component output="false" displayname="pdfbox.cfc" {
       .removeEmbeddedFiles()
       .removeJavaScript()
       .removeEmbeddedIndex()
-      .removeMetaData();
+      .removeMetaData()
+      .removeBookmarks();
 
     return this;
   }
