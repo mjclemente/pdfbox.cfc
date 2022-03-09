@@ -158,6 +158,34 @@ component extends="testbox.system.BaseSpec" {
 
           expect(final_embeddedFiles.keyArray().len()).toBe(0);
         });
+        it("can locate an embedded search index", function() {
+          pdfbox = new pdfbox.pdfbox(variables.pdfs.testing);
+
+          var hasEmbeddedIndex = pdfBox.hasEmbeddedSearchIndex();
+          expect(hasEmbeddedIndex).toBeTrue();
+        });
+        it("does not find an embedded search index when one is not present", function() {
+          pdfbox = new pdfbox.pdfbox(variables.pdfs.friday);
+
+          var hasEmbeddedIndex = pdfBox.hasEmbeddedSearchIndex();
+          expect(hasEmbeddedIndex).toBeFalse();
+        });
+        it("can remove embedded search indexes", function() {
+          initial_pdfbox = new pdfbox.pdfbox(variables.pdfs.testing);
+          var hasEmbeddedIndex = initial_pdfbox.hasEmbeddedSearchIndex();
+
+          expect(hasEmbeddedIndex).toBeTrue();
+
+          initial_pdfbox.removeEmbeddedIndex();
+
+          var destination = expandPath( "#tmpDir#withoutindex-#getFileFromPath(variables.pdfs.testing)#" );
+          initial_pdfbox.save( destination );
+
+          pdfbox = new pdfbox.pdfbox(destination);
+          var final_hasEmbeddedIndex = pdfbox.hasEmbeddedSearchIndex();
+
+          expect(final_hasEmbeddedIndex).toBeFalse();
+        });
         it("can remove metadata", function() {
           initial_pdfbox = new pdfbox.pdfbox(variables.pdfs.testing);
           // metadata
