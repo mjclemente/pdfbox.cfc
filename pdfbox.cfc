@@ -186,6 +186,16 @@ component output="false" displayname="pdfbox.cfc" {
   }
 
   /**
+  * https://stackoverflow.com/a/36285275
+  */
+  public struct function getEmbeddedFiles() {
+    var catalog = variables.pdf.getDocumentCatalog();
+    var documentTree = catalog.getNames();
+    var embeddedFiles = documentTree.getEmbeddedFiles().getNames();
+    return !isNull(embeddedFiles) ? embeddedFiles : {};
+  }
+
+  /**
    * https://stackoverflow.com/questions/17019960/extract-embedded-files-from-pdf-using-pdfbox-in-net-application
    * https://github.com/Valuya/fontbox/blob/master/examples/src/main/java/org/apache/pdfbox/examples/pdmodel/EmbeddedFiles.java
    * @hint Removes embedded files
