@@ -34,10 +34,12 @@ component extends="testbox.system.BaseSpec" {
       afterEach(function() {
         if( variables.keyExists("initial_pdfbox") ){
           variables.initial_pdfbox.close();
+          structDelete(variables, "initial_pdfbox");
         }
-        variables.pdfbox.close();
-        structDelete(variables, "pdfbox");
-        structDelete(variables, "initial_pdfbox");
+        if( variables.keyExists("pdfbox") ){
+          variables.pdfbox.close();
+          structDelete(variables, "pdfbox");
+        }
       });
 
       it("is using the expected version", function() {
