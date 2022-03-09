@@ -136,6 +136,26 @@ component output="false" displayname="pdfbox.cfc" {
     return dataElements;
   }
 
+  public array function getDocumentOutlineTitles() {
+    var outline = [];
+    var documentOutline = variables.pdf.getDocumentCatalog().getDocumentOutline();
+    if( isNull( documentOutline ) ){
+      return outline;
+    }
+    var current = documentOutline.getFirstChild();
+    while( !isNull(current) ){
+      outline.append(current.getTitle());
+      current = current.getNextSibling();
+    }
+
+    return outline;
+  }
+
+  public any function removeBookmarks() {
+    variables.pdf.getDocumentCatalog().setDocumentOutline(javaCast("null",0));
+    return this;
+  }
+
   /**
    * https://pdfbox.apache.org/docs/2.0.8/javadocs/org/apache/pdfbox/pdmodel/interactive/annotation/PDAnnotation.html
    * @hint returns all annotations within the pdf as an array; the type of each object returned is PDAnnotation, so you'll need to look at the javadocs for that to see what methods are available
