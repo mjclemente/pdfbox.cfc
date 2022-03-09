@@ -142,6 +142,22 @@ component extends="testbox.system.BaseSpec" {
           expect(annotions.len()).toBe(14);
           expect(final_annotations.len()).toBe(0);
         });
+        it("can remove embedded files", function() {
+          initial_pdfbox = new pdfbox.pdfbox(variables.pdfs.testing);
+          var embeddedFiles = initial_pdfbox.getEmbeddedFiles();
+
+          expect(embeddedFiles.keyArray().len()).toBe(2);
+
+          initial_pdfbox.removeEmbeddedFiles();
+
+          var destination = expandPath( "#tmpDir#withoutfiles-#getFileFromPath(variables.pdfs.testing)#" );
+          initial_pdfbox.save( destination );
+
+          pdfbox = new pdfbox.pdfbox(destination);
+          var final_embeddedFiles = pdfbox.getEmbeddedFiles();
+
+          expect(final_embeddedFiles.keyArray().len()).toBe(0);
+        });
         it("can remove metadata", function() {
           initial_pdfbox = new pdfbox.pdfbox(variables.pdfs.testing);
           // metadata
