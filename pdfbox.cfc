@@ -137,9 +137,9 @@ component output="false" displayname="pdfbox.cfc" {
   }
 
   public array function getDocumentOutlineTitles() {
-    var outline = [];
+    var outline         = [];
     var documentOutline = variables.pdf.getDocumentCatalog().getDocumentOutline();
-    if( isNull( documentOutline ) ){
+    if( isNull(documentOutline) ){
       return outline;
     }
     var current = documentOutline.getFirstChild();
@@ -152,7 +152,7 @@ component output="false" displayname="pdfbox.cfc" {
   }
 
   public any function removeBookmarks() {
-    variables.pdf.getDocumentCatalog().setDocumentOutline(javaCast("null",0));
+    variables.pdf.getDocumentCatalog().setDocumentOutline(javacast("null", 0));
     return this;
   }
 
@@ -206,11 +206,11 @@ component output="false" displayname="pdfbox.cfc" {
   }
 
   /**
-  * https://stackoverflow.com/a/36285275
-  */
+   * https://stackoverflow.com/a/36285275
+   */
   public struct function getEmbeddedFiles() {
-    var catalog = variables.pdf.getDocumentCatalog();
-    var documentTree = catalog.getNames();
+    var catalog       = variables.pdf.getDocumentCatalog();
+    var documentTree  = catalog.getNames();
     var embeddedFiles = documentTree.getEmbeddedFiles().getNames();
     return !isNull(embeddedFiles) ? embeddedFiles : {};
   }
@@ -221,7 +221,7 @@ component output="false" displayname="pdfbox.cfc" {
    * @hint Removes embedded files
    */
   public any function removeEmbeddedFiles() {
-    var catalog = variables.pdf.getDocumentCatalog();
+    var catalog      = variables.pdf.getDocumentCatalog();
     var documentTree = catalog.getNames();
     var fileTreeNode = documentTree.getEmbeddedFiles();
     if( !isNull(fileTreeNode) ) fileTreeNode.getCOSObject().clear();
@@ -247,9 +247,9 @@ component output="false" displayname="pdfbox.cfc" {
    * @hint Removes the javascript embedded in the document itself
    */
   public any function removeEmbeddedJavaScript() {
-    var catalog = variables.pdf.getDocumentCatalog();
+    var catalog      = variables.pdf.getDocumentCatalog();
     var documentTree = catalog.getNames();
-    var jsTreeNode = documentTree.getJavaScript();
+    var jsTreeNode   = documentTree.getJavaScript();
     if( !isNull(jsTreeNode) ) jsTreeNode.getCOSObject().clear();
     return this;
   }
@@ -362,21 +362,21 @@ component output="false" displayname="pdfbox.cfc" {
   }
 
   /**
-  * Useful for inspecting structure: https://pdfux.com/inspect-pdf/
-  * This is based on the search indexes that I've seen and may not locate them all. Would be happy to see other examples
-  */
+   * Useful for inspecting structure: https://pdfux.com/inspect-pdf/
+   * This is based on the search indexes that I've seen and may not locate them all. Would be happy to see other examples
+   */
   public boolean function hasEmbeddedSearchIndex() {
     var searchIndex = variables.pdf
       .getDocumentCatalog()
       .getCOSObject()
       .getItem("PieceInfo");
-    if( isNull( searchIndex ) ){
+    if( isNull(searchIndex) ){
       return false;
     }
 
-    var indexName = createObjectHelper("org.apache.pdfbox.cos.COSName").getPDFName("SearchIndex");
+    var indexName   = createObjectHelper("org.apache.pdfbox.cos.COSName").getPDFName("SearchIndex");
     var indexObject = searchIndex.getItem(indexName);
-    return !isNull( indexObject );
+    return !isNull(indexObject);
   }
 
   /**

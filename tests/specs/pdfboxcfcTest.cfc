@@ -13,12 +13,12 @@ component extends="testbox.system.BaseSpec" {
       "testing": expandPath("./resources/pdfs/testing.pdf"),
       "longer" : expandPath("./resources/pdfs/longer.pdf")
     };
-    variables["nl"] = createObject("java", "java.lang.System").getProperty("line.separator");
+    variables["nl"]     = createObject("java", "java.lang.System").getProperty("line.separator");
     variables["tmpDir"] = "./resources/tmp/";
   }
 
   function afterAll() {
-    directoryDelete(  expandPath(variables.tmpDir ), true );
+    directoryDelete(expandPath(variables.tmpDir), true);
     structDelete(variables, "pdfs");
     structDelete(variables, "nl");
     structDelete(variables, "tmpDir");
@@ -62,6 +62,7 @@ component extends="testbox.system.BaseSpec" {
           var text = pdfbox.getText();
           expect(text).toBe(expected);
         });
+
         it("can extract text from a single page", function() {
           var expected = "Anna Karenina #nl#Tolstoy #nl#Happy families are all alike; every unhappy family is unhappy in its own way. #nl#";
 
@@ -70,6 +71,7 @@ component extends="testbox.system.BaseSpec" {
           var text = pdfbox.getPageText(2);
           expect(text).toBe(expected);
         });
+
         it("can extract text as html", function() {
           pdfbox = new pdfbox.pdfbox(variables.pdfs.friday);
 
@@ -79,6 +81,7 @@ component extends="testbox.system.BaseSpec" {
           expect(text).toInclude("<p>Friday's Child #nl#Auden #nl#</p>");
           expect(text).toInclude("</html>");
         });
+
         it("returns an empty string when extracting text from a defective pdf (issue ##2)", function() {
           var expected = "";
 
@@ -91,21 +94,23 @@ component extends="testbox.system.BaseSpec" {
 
       describe("pdf creation", function() {
         it("can add pages", function() {
-
-          var initial_pdfbox = new pdfbox.pdfbox(variables.pdfs.blank);
+          var initial_pdfbox     = new pdfbox.pdfbox(variables.pdfs.blank);
           var initial_page_count = initial_pdfbox.getNumberOfPages();
-          var cfPdfObject = '';
-          cfdocument( format = "PDF", name = 'cfPdfObject' ) {
-            writeOutput( '<h1>HI!</h1><p>Am I visible</p><br><p>AHHHH AHHH AHHH AHH AHHH AHHHHHHHAHHHHHH</p>' );
+          var cfPdfObject        = "";
+
+          cfdocument(format = "PDF", name = "cfPdfObject") {
+            writeOutput("<h1>HI!</h1><p>Am I visible</p><br><p>AHHHH AHHH AHHH AHH AHHH AHHHHHHHAHHHHHH</p>");
           };
-          initial_pdfbox.addPages( cfPdfObject );
-          initial_pdfbox.addPages( cfPdfObject );
-          var destination = expandPath( "#tmpDir#addedpage-#getFileFromPath(variables.pdfs.blank)#" );
+
+          initial_pdfbox.addPages(cfPdfObject);
+          initial_pdfbox.addPages(cfPdfObject);
+          var destination = expandPath("#tmpDir#addedpage-#getFileFromPath(variables.pdfs.blank)#");
 
           // closes file automatically
-          initial_pdfbox.save( destination );
+          initial_pdfbox.save(destination);
 
           pdfbox = new pdfbox.pdfbox(destination);
+
           var final_page_count = pdfbox.getNumberOfPages();
 
           expect(initial_page_count).toBe(1);
@@ -116,108 +121,121 @@ component extends="testbox.system.BaseSpec" {
       describe("sanitization", function() {
         it("can remove annotations, preserving forms", function() {
           initial_pdfbox = new pdfbox.pdfbox(variables.pdfs.testing);
-          var annotions = initial_pdfbox.listAnnotations();
-          initial_pdfbox.removeAnnotations( preserveForm = true );
+          var annotions  = initial_pdfbox.listAnnotations();
+          initial_pdfbox.removeAnnotations(preserveForm = true);
 
-          var destination = expandPath( "#tmpDir#withoutannotations-#getFileFromPath(variables.pdfs.testing)#" );
-          initial_pdfbox.save( destination );
+          var destination = expandPath("#tmpDir#withoutannotations-#getFileFromPath(variables.pdfs.testing)#");
+          initial_pdfbox.save(destination);
 
           pdfbox = new pdfbox.pdfbox(destination);
+
           var final_annotations = pdfbox.listAnnotations();
 
           expect(annotions.len()).toBe(14);
           expect(final_annotations.len()).toBe(3);
         });
+
         it("can remove all annotations", function() {
           initial_pdfbox = new pdfbox.pdfbox(variables.pdfs.testing);
-          var annotions = initial_pdfbox.listAnnotations();
-          initial_pdfbox.removeAnnotations( preserveForm = false );
+          var annotions  = initial_pdfbox.listAnnotations();
+          initial_pdfbox.removeAnnotations(preserveForm = false);
 
-          var destination = expandPath( "#tmpDir#withoutannotations-#getFileFromPath(variables.pdfs.testing)#" );
-          initial_pdfbox.save( destination );
+          var destination = expandPath("#tmpDir#withoutannotations-#getFileFromPath(variables.pdfs.testing)#");
+          initial_pdfbox.save(destination);
 
           pdfbox = new pdfbox.pdfbox(destination);
+
           var final_annotations = pdfbox.listAnnotations();
 
           expect(annotions.len()).toBe(14);
           expect(final_annotations.len()).toBe(0);
         });
+
         it("can remove embedded files", function() {
-          initial_pdfbox = new pdfbox.pdfbox(variables.pdfs.testing);
+          initial_pdfbox    = new pdfbox.pdfbox(variables.pdfs.testing);
           var embeddedFiles = initial_pdfbox.getEmbeddedFiles();
 
           expect(embeddedFiles.keyArray().len()).toBe(2);
 
           initial_pdfbox.removeEmbeddedFiles();
 
-          var destination = expandPath( "#tmpDir#withoutfiles-#getFileFromPath(variables.pdfs.testing)#" );
-          initial_pdfbox.save( destination );
+          var destination = expandPath("#tmpDir#withoutfiles-#getFileFromPath(variables.pdfs.testing)#");
+          initial_pdfbox.save(destination);
 
           pdfbox = new pdfbox.pdfbox(destination);
+
           var final_embeddedFiles = pdfbox.getEmbeddedFiles();
 
           expect(final_embeddedFiles.keyArray().len()).toBe(0);
         });
+
         it("can locate an embedded search index", function() {
           pdfbox = new pdfbox.pdfbox(variables.pdfs.testing);
 
           var hasEmbeddedIndex = pdfBox.hasEmbeddedSearchIndex();
           expect(hasEmbeddedIndex).toBeTrue();
         });
+
         it("does not find an embedded search index when one is not present", function() {
           pdfbox = new pdfbox.pdfbox(variables.pdfs.friday);
 
           var hasEmbeddedIndex = pdfBox.hasEmbeddedSearchIndex();
           expect(hasEmbeddedIndex).toBeFalse();
         });
+
         it("can remove embedded search indexes", function() {
-          initial_pdfbox = new pdfbox.pdfbox(variables.pdfs.testing);
+          initial_pdfbox       = new pdfbox.pdfbox(variables.pdfs.testing);
           var hasEmbeddedIndex = initial_pdfbox.hasEmbeddedSearchIndex();
 
           expect(hasEmbeddedIndex).toBeTrue();
 
           initial_pdfbox.removeEmbeddedIndex();
 
-          var destination = expandPath( "#tmpDir#withoutindex-#getFileFromPath(variables.pdfs.testing)#" );
-          initial_pdfbox.save( destination );
+          var destination = expandPath("#tmpDir#withoutindex-#getFileFromPath(variables.pdfs.testing)#");
+          initial_pdfbox.save(destination);
 
           pdfbox = new pdfbox.pdfbox(destination);
+
           var final_hasEmbeddedIndex = pdfbox.hasEmbeddedSearchIndex();
 
           expect(final_hasEmbeddedIndex).toBeFalse();
         });
+
         it("can return document outline titles", function() {
           pdfbox = new pdfbox.pdfbox(variables.pdfs.testing);
 
           var outline = pdfBox.getDocumentOutlineTitles();
           expect(outline.len()).toBe(2);
         });
+
         it("does not return outline titles when there is no outline", function() {
           pdfbox = new pdfbox.pdfbox(variables.pdfs.friday);
 
           var outline = pdfBox.getDocumentOutlineTitles();
           expect(outline.len()).toBe(0);
         });
+
         it("can remove the document outline (bookmarks)", function() {
           initial_pdfbox = new pdfbox.pdfbox(variables.pdfs.testing);
-          var outline = initial_pdfbox.getDocumentOutlineTitles();
+          var outline    = initial_pdfbox.getDocumentOutlineTitles();
 
           expect(outline.len()).toBe(2);
 
           initial_pdfbox.removeBookmarks();
 
-          var destination = expandPath( "#tmpDir#withoutbookmarks-#getFileFromPath(variables.pdfs.testing)#" );
-          initial_pdfbox.save( destination );
+          var destination = expandPath("#tmpDir#withoutbookmarks-#getFileFromPath(variables.pdfs.testing)#");
+          initial_pdfbox.save(destination);
 
           pdfbox = new pdfbox.pdfbox(destination);
+
           var final_outline = pdfbox.getDocumentOutlineTitles();
 
           expect(final_outline.len()).toBe(0);
         });
+
         it("can remove metadata", function() {
           initial_pdfbox = new pdfbox.pdfbox(variables.pdfs.testing);
-          // metadata
-          var doc_info = initial_pdfbox.getDocumentInformation();
+          var doc_info   = initial_pdfbox.getDocumentInformation();
 
           expect(doc_info.getTitle()).toBe("I'm for Testing");
           expect(doc_info.getAuthor()).toBe("Test Author Name");
@@ -227,8 +245,8 @@ component extends="testbox.system.BaseSpec" {
 
           initial_pdfbox.removeMetaData();
 
-          var destination = expandPath( "#tmpDir#withoutmetadata-#getFileFromPath(variables.pdfs.testing)#" );
-          initial_pdfbox.save( destination );
+          var destination = expandPath("#tmpDir#withoutmetadata-#getFileFromPath(variables.pdfs.testing)#");
+          initial_pdfbox.save(destination);
 
           pdfbox = new pdfbox.pdfbox(destination);
 
@@ -241,8 +259,6 @@ component extends="testbox.system.BaseSpec" {
           expect(final_doc_info.getProducer()).toBeNull();
         });
       });
-
-
     });
   }
 
