@@ -14,11 +14,14 @@ component extends="testbox.system.BaseSpec" {
       "longer" : expandPath("./resources/pdfs/longer.pdf")
     };
     variables["nl"] = createObject("java", "java.lang.System").getProperty("line.separator");
+    variables["tmpDir"] = "./resources/tmp/";
   }
 
   function afterAll() {
+    directoryDelete(  expandPath(variables.tmpDir ), true );
     structDelete(variables, "pdfs");
     structDelete(variables, "nl");
+    structDelete(variables, "tmpDir");
   }
 
   /*********************************** BDD SUITES ***********************************/
