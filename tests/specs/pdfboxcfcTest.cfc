@@ -78,6 +78,63 @@ component extends="testbox.system.BaseSpec" {
           expect(text).toInclude("</html>");
         });
       });
+
+      describe("pdf creation", function() {
+        it("can add pages", function() {
+
+          var initial_pdfbox = new pdfbox.pdfbox(variables.pdfs.blank);
+          var initial_page_count = initial_pdfbox.getNumberOfPages();
+          var cfPdfObject = '';
+          cfdocument( format = "PDF", name = 'cfPdfObject' ) {
+            writeOutput( '<h1>HI!</h1><p>Am I visible</p><br><p>AHHHH AHHH AHHH AHH AHHH AHHHHHHHAHHHHHH</p>' );
+          };
+          initial_pdfbox.addPages( cfPdfObject );
+          initial_pdfbox.addPages( cfPdfObject );
+          var destination = expandPath( "#tmpDir#addedpage-#getFileFromPath(variables.pdfs.blank)#" );
+
+          // closes file automatically
+          initial_pdfbox.save( destination );
+
+          pdfbox = new pdfbox.pdfbox(destination);
+          var final_page_count = pdfbox.getNumberOfPages();
+
+          expect(initial_page_count).toBe(1);
+          expect(final_page_count).toBe(3);
+        });
+      });
+
+      describe("sanitization", function() {
+        it("can remove annotations, preserving forms", function() {
+          initial_pdfbox = new pdfbox.pdfbox(variables.pdfs.testing);
+          var annotions = initial_pdfbox.listAnnotations();
+          initial_pdfbox.removeAnnotations( preserveForm = true );
+
+          var destination = expandPath( "#tmpDir#withoutannotations-#getFileFromPath(variables.pdfs.testing)#" );
+          initial_pdfbox.save( destination );
+
+          pdfbox = new pdfbox.pdfbox(destination);
+          var final_annotations = pdfbox.listAnnotations();
+
+          expect(annotions.len()).toBe(14);
+          expect(final_annotations.len()).toBe(3);
+        });
+        it("can remove all annotations", function() {
+          initial_pdfbox = new pdfbox.pdfbox(variables.pdfs.testing);
+          var annotions = initial_pdfbox.listAnnotations();
+          initial_pdfbox.removeAnnotations( preserveForm = false );
+
+          var destination = expandPath( "#tmpDir#withoutannotations-#getFileFromPath(variables.pdfs.testing)#" );
+          initial_pdfbox.save( destination );
+
+          pdfbox = new pdfbox.pdfbox(destination);
+          var final_annotations = pdfbox.listAnnotations();
+
+          expect(annotions.len()).toBe(14);
+          expect(final_annotations.len()).toBe(0);
+        });
+      });
+
+
     });
   }
 
