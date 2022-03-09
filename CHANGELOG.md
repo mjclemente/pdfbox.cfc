@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.1.0] - 2022-03-09
+
+### Added
+
+- Methods `getVersion()` and `getAcroForm()`
+- TestBox as dev dependency
+- Basic testing via TestBox in `/tests`
+- `server.json` for testing
+- `.gitignore`
+
 ## [1.0.0] - 2022-03-08
 
 ### Added
