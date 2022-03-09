@@ -125,6 +125,10 @@ component output="false" displayname="pdfbox.cfc" {
     return this;
   }
 
+  public any function getAcroForm() {
+    return variables.pdf.getDocumentCatalog().getAcroForm();
+  }
+
   public any function listXFAElements() {
     var PDAcroForm   = variables.pdf.getDocumentCatalog().getAcroForm();
     var documentXML  = PDAcroForm.getXFA().getDocument();
