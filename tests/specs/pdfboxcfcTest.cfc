@@ -119,6 +119,24 @@ component extends="testbox.system.BaseSpec" {
       });
 
       describe("sanitization", function() {
+        it("does not error when sanitizing pdfs without embedded files, metadata, etc.", function() {
+          initial_pdfbox    = new pdfbox.pdfbox(variables.pdfs.friday);
+          var embeddedFiles = initial_pdfbox.getEmbeddedFiles();
+
+          expect(embeddedFiles.keyArray().len()).toBe(0);
+
+          initial_pdfbox.sanitize();
+
+          var destination = expandPath("#tmpDir#cleansanitize-#getFileFromPath(variables.pdfs.friday)#");
+          initial_pdfbox.save(destination);
+
+          pdfbox = new pdfbox.pdfbox(destination);
+
+          var final_embeddedFiles = pdfbox.getEmbeddedFiles();
+
+          expect(final_embeddedFiles.keyArray().len()).toBe(0);
+        });
+
         it("can remove annotations, preserving forms", function() {
           initial_pdfbox = new pdfbox.pdfbox(variables.pdfs.testing);
           var annotions  = initial_pdfbox.listAnnotations();
