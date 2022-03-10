@@ -209,9 +209,11 @@ component output="false" displayname="pdfbox.cfc" {
    * https://stackoverflow.com/a/36285275
    */
   public struct function getEmbeddedFiles() {
-    var catalog       = variables.pdf.getDocumentCatalog();
-    var documentTree  = catalog.getNames();
-    var embeddedFiles = documentTree.getEmbeddedFiles().getNames();
+    var catalog      = variables.pdf.getDocumentCatalog();
+    var documentTree = catalog.getNames();
+    if( !isNull(documentTree) ){
+      var embeddedFiles = documentTree.getEmbeddedFiles().getNames();
+    }
     return !isNull(embeddedFiles) ? embeddedFiles : {};
   }
 
@@ -223,8 +225,10 @@ component output="false" displayname="pdfbox.cfc" {
   public any function removeEmbeddedFiles() {
     var catalog      = variables.pdf.getDocumentCatalog();
     var documentTree = catalog.getNames();
-    var fileTreeNode = documentTree.getEmbeddedFiles();
-    if( !isNull(fileTreeNode) ) fileTreeNode.getCOSObject().clear();
+    if( !isNull(documentTree) ){
+      var fileTreeNode = documentTree.getEmbeddedFiles();
+      if( !isNull(fileTreeNode) ) fileTreeNode.getCOSObject().clear();
+    }
     return this;
   }
 
@@ -249,8 +253,10 @@ component output="false" displayname="pdfbox.cfc" {
   public any function removeEmbeddedJavaScript() {
     var catalog      = variables.pdf.getDocumentCatalog();
     var documentTree = catalog.getNames();
-    var jsTreeNode   = documentTree.getJavaScript();
-    if( !isNull(jsTreeNode) ) jsTreeNode.getCOSObject().clear();
+    if( !isNull(documentTree) ){
+      var jsTreeNode = documentTree.getJavaScript();
+      if( !isNull(jsTreeNode) ) jsTreeNode.getCOSObject().clear();
+    }
     return this;
   }
 
