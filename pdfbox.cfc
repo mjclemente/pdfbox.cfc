@@ -359,8 +359,10 @@ component output="false" displayname="pdfbox.cfc" {
     var baos       = createObject("java", "java.io.ByteArrayOutputStream").init();
     serializer.serialize(metadata, baos, true);
     var metadataStream = variables.pdf.getDocumentCatalog().getMetadata();
-    metadataStream.importXMPMetadata(baos.toByteArray());
-    variables.pdf.getDocumentCatalog().setMetadata(metadataStream);
+    if( !isNull(metadataStream) ){
+      metadataStream.importXMPMetadata(baos.toByteArray());
+      variables.pdf.getDocumentCatalog().setMetadata(metadataStream);
+    }
 
     variables.hasMetadata = false;
 
