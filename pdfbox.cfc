@@ -557,5 +557,58 @@ component output="false" displayname="pdfbox.cfc" {
       return result;
     }
   }
+  
+  /**
+	 * createImageFromPage
+	 * Creates a JPG image from a pdf object page
+	 * Output file name will be [originalFileName]_page_[page].jpg
+	 *
+	 * @page the page number to create an image from
+	 * @destination path to extract the image i.e. c:\temp\ if '' then it will use the PDF file's source folder
+	 * @height final destination height of the image (supports percentages)
+	 * @width final destination width of the image (supports percentages)
+	 */
+	public string function createImageFromPage(
+		required numeric page = 1,
+		string destination    = "",
+		string height         = "100%",
+		string width          = "100%"
+	){
+		// get the base paths file names needed
+		var baseFile     = getFileFromPath( variables.src ); // get the filename only
+		var baseFilename = reReplace( basefile, "\.[^.]*$", "" ); // remove the file extension
+		var basepath     = getDirectoryFromPath( variables.src );
+		if ( !len( arguments.destination ) ) {
+			arguments.destination = basepath;
+		}
+
+		var outputFilename = baseFilename & "_page_#arguments.page#.jpg";
+
+		// render the PDF and get an instance of imageio
+		var pdfRenderer = createObject( "java", "org.apache.pdfbox.rendering.PDFRenderer" ).init( pdf );
+		var imageIo     = createObject( "java", "javax.imageio.ImageIO" );
+
+		// render the image and safe it to disk
+		var img     = pdfRenderer.renderImage( page - 1 );
+		var outFile = createObject( "java", "java.io.File" ).init( arguments.destination & outputFilename );
+		imageIo.write( img, "JPEG", outFile );
+
+		if (
+			arguments.width != "100%" ||
+			arguments.height != "100%"
+		) {
+			// resize the image
+			cfimage(
+				action      = "resize",
+				source      = arguments.destination & outputFilename,
+				destination = arguments.destination & outputFilename,
+				overwrite   = true,
+				width       = arguments.width,
+				height      = arguments.height
+			);
+		}
+
+		return arguments.destination & outputFilename;
+	}
 
 }
