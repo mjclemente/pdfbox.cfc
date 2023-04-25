@@ -118,6 +118,9 @@ Checks to see if an embedded search index can be found in the pdf. This includes
 #### `getDocumentOutlineTitles()`
 Returns an array of with the titles for the document outline sections (bookmarks). I only added this to make it easier to confirm that the outline was being removed via `removeBookmarks()`
 
+#### `createImageFromPage( required numeric page = 1, string destination = "", string height = "100%", string width = "100%" )`
+Creates a JPG image from a pdf. Output file name will be [originalFileName]_page_[page].jpg
+
 
 #### Other Methods Not Mentioned Here
 For methods not explicity provided, this project uses `onMissingMethod()` to invoke the underlying PDFBox library class for `PDDocument`, which is its in-memory representation of the PDF document, documented [here](https://pdfbox.apache.org/docs/2.0.13/javadocs/org/apache/pdfbox/pdmodel/PDDocument.html). Consequently, you can utilize some of the methods provided by PDFBox directly. For example, `pdfbox.getNumberOfPages()` will return the number of pages the document has; it does this by delegating to the [`getNumberOfPages()`](https://pdfbox.apache.org/docs/2.0.13/javadocs/org/apache/pdfbox/pdmodel/PDDocument.html#getNumberOfPages--) method in the `PDDocument` class.
