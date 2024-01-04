@@ -83,17 +83,20 @@ component extends="testbox.system.BaseSpec" {
           expect(text).toInclude("</html>");
         });
 
-        it("returns an empty string when extracting text from a defective pdf (issue ##2)", function() {
-          var expected = "";
+        // pdfbox 2.0.30 is able to handle the defective pdf we have. If we encounter another, we can re-add this test
+        // it("returns an empty string when extracting text from a defective pdf (issue ##2)", function() {
+        //   var expected = "";
 
-          pdfbox = new pdfbox.pdfbox(variables.pdfs.issue2);
+        //   pdfbox = new pdfbox.pdfbox(variables.pdfs.issue2);
 
-          var text = pdfbox.getText();
-          expect(text).toBe(expected);
-        });
+        //   var text = pdfbox.getText();
+        //   expect(text).toBe(expected);
+        // });
+
       });
 
       describe("pdf creation", function() {
+
         it("can add pages", function() {
           var initial_pdfbox     = new pdfbox.pdfbox(variables.pdfs.blank);
           var initial_page_count = initial_pdfbox.getNumberOfPages();
