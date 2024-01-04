@@ -457,6 +457,35 @@ component output="false" displayname="pdfbox.cfc" {
   }
 
   /**
+  * @hint extracts a range of pages from the pdf and saves them to a new file
+  */
+  public void function splitPages(required string dest, required numeric startpage, required numeric endpage ){
+
+    if( arguments.startpage < 1 || arguments.endpage > variables.pdf.getNumberOfPages() ){
+      close();
+      throw("The start and end page numbers must be within the range of the pdf document (#variables.pdf.getNumberOfPages()# pages).");
+    }
+
+    var pages       = variables.pdf.getPages();
+    var iterator    = pages.iterator();
+
+    var newPdf = getPDDocument();
+
+    var count = 0;
+    while( iterator.hasNext() ){
+      var page = iterator.next();
+      count++;
+      if( count >= arguments.startPage && count <= arguments.endPage ){
+        newPdf.addPage(page);
+      }
+    }
+
+    newPdf.save(dest);
+
+    newPdf.close();
+  }
+
+  /**
    * @hint By default, the file is saved to the same path that it was loaded from.
    *
    * Note that saving the document also automatically closes the instance of the PDDocument that was created, so it should be the last thing you do with this object.

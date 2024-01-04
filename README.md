@@ -95,6 +95,9 @@ Modeled after `cfpdf`'s "sanitize" action, this runs all data removal methods on
 #### `addPages( required any pdfPages )`
 Add a page or pages to the end of the PDF. The `pdfPages` argument must be either the absolute path to a pdf file on disk, or a ColdFusion PDF object like those created via `cfdocument`.
 
+#### `splitPages( required string dest, required numeric startpage, required numeric endpage )`
+Split pages from the source pdf into a separate file. The `dest` argument provides the location for the new file. The `startpage` is the first page to include in the new file, up to and including the `endpage`.
+
 #### `save( string dest = "" )`
 By default, this saves the PDF to the same path that it was loaded from. You can use the `dest` argument to save the modified PDF to a new location. If the destination does not exist, it is created automatically. Note that the `dest` argument is required in order to save PDFs loaded from file input streams.
 

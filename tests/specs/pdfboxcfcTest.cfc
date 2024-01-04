@@ -11,7 +11,8 @@ component extends="testbox.system.BaseSpec" {
       "blank"  : expandPath("./resources/pdfs/blank.pdf"),
       "issue2" : expandPath("./resources/pdfs/issue2.pdf"),
       "testing": expandPath("./resources/pdfs/testing.pdf"),
-      "longer" : expandPath("./resources/pdfs/longer.pdf")
+      "longer" : expandPath("./resources/pdfs/longer.pdf"),
+      "split" : expandPath("./resources/pdfs/goblin.pdf")
     };
     variables["nl"]     = createObject("java", "java.lang.System").getProperty("line.separator");
     variables["tmpDir"] = "./resources/tmp/";
@@ -116,6 +117,27 @@ component extends="testbox.system.BaseSpec" {
           expect(initial_page_count).toBe(1);
           expect(final_page_count).toBe(3);
         });
+
+        it("can split pdfs", function() {
+          var initial_pdfbox     = new pdfbox.pdfbox(variables.pdfs.split);
+          var initial_page_count = initial_pdfbox.getNumberOfPages();
+
+          var destination = expandPath("#tmpDir#split-#getFileFromPath(variables.pdfs.split)#");
+
+          initial_pdfbox.splitPages(destination,2,4);
+
+          initial_pdfbox.close();
+
+          pdfbox = new pdfbox.pdfbox(destination);
+
+          var final_page_count = pdfbox.getNumberOfPages();
+          var text = pdfbox.getPageText(1);
+          pdfbox.close();
+          expect(initial_page_count).toBe(14);
+          expect(final_page_count).toBe(3);
+          expect(text).toInclude("We must not look at goblin men,");
+        });
+
       });
 
       describe("sanitization", function() {
