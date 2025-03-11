@@ -47,6 +47,9 @@ Returns the text extracted from specific pages of the pdf document. The `endpage
 #### `getTextAsHtml()`
 Returns the text extracted from the PDF, wrapped in simple html. The underlying class used is [PDFText2HTML](https://pdfbox.apache.org/docs/2.0.8/javadocs/org/apache/pdfbox/tools/PDFText2HTML.html).
 
+#### `drawRectangle()`
+Draws a rectangle on the PDF at given coordinates.
+
 #### `flatten()`
 Flattens any forms on the pdf.
 
