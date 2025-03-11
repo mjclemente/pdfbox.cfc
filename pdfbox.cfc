@@ -112,6 +112,46 @@ component output="false" displayname="pdfbox.cfc" {
     return this;
   }
 
+    /**
+   * @hint x and y coordinates here are assumed to be given from the top left corner of the page
+   * @color options are black, yellow, blue, or red for now
+   */
+  public any function drawRectangle(
+    required numeric page, 
+    required numeric x, 
+    required numeric y, 
+    required numeric width, 
+    required numeric height, 
+    numeric lineWidth = 2, 
+    string color = "black"
+  ) {
+    // pdfbox uses 0-based indexing, so we need to subtract 1 from the page number
+    var page = variables.pdf.getPage(arguments.page - 1);
+    var contentStream = createObjectHelper("org.apache.pdfbox.pdmodel.PDPageContentStream").init(variables.pdf, page, true, true);
+    contentStream.setLineWidth(arguments.lineWidth);
+
+    // we need to adjust because pdfbox calculates y from the bottom of the page
+    var pageHeight = page.getMediaBox().getHeight();
+    var adjustedY = pageHeight - arguments.y - arguments.height;
+
+    contentStream.addRect(arguments.x, adjustedY, arguments.width, arguments.height)
+
+    if( arguments.color == "black") {
+      contentStream.setStrokingColor(createObject("java", "java.awt.Color").init(0, 0, 0));
+    } else if (arguments.color == "yellow") {
+      contentStream.setStrokingColor(createObject("java", "java.awt.Color").init(1, 1, 0));
+    } else if (arguments.color == "blue") {
+      contentStream.setStrokingColor(createObject("java", "java.awt.Color").init(0, 0, 1));
+    } else if (arguments.color == "red") {
+      contentStream.setStrokingColor(createObject("java", "java.awt.Color").init(1, 0, 0));
+    }
+    
+    contentStream.stroke();
+    contentStream.close();
+
+    return this;
+  }
+
   /**
    * https://stackoverflow.com/questions/14454387/pdfbox-how-to-flatten-a-pdf-form#19723539
    * @hint Flattens any forms on the pdf
