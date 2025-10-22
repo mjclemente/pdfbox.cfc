@@ -117,12 +117,12 @@ component output="false" displayname="pdfbox.cfc" {
    * @color options are black, yellow, blue, or red for now
    */
   public any function drawRectangle(
-    required numeric page, 
-    required numeric x, 
-    required numeric y, 
-    required numeric width, 
-    required numeric height, 
-    numeric lineWidth = 2, 
+    required numeric page,
+    required numeric x,
+    required numeric y,
+    required numeric width,
+    required numeric height,
+    numeric lineWidth = 2,
     string color = "black"
   ) {
     // pdfbox uses 0-based indexing, so we need to subtract 1 from the page number
@@ -145,7 +145,7 @@ component output="false" displayname="pdfbox.cfc" {
     } else if (arguments.color == "red") {
       contentStream.setStrokingColor(createObject("java", "java.awt.Color").init(1, 0, 0));
     }
-    
+
     contentStream.stroke();
     contentStream.close();
 
