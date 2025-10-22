@@ -7,7 +7,7 @@ component output="false" displayname="pdfbox.cfc" {
 
   /**
    * @hint
-   * @src must be the absolute path to an on-disk pdf file or a file input stream
+   * @src must be the absolute path to an on-disk pdf file, a ColdFusion pdf object, an S3ObjectInputStream, or a byte array.
    * @classPath a Lucee specific option; provide the path to a directory containing the PDFBox class files.
    */
   public any function init(required any src, string classPath = "") {

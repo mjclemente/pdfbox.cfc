@@ -18,7 +18,7 @@ PDFBox's performance is generally faster that CFML's built in functions, particu
 - [Contributing](#contributing)
 
 ## Getting Started
-Instances of `pdfbox.cfc` are created by passing it the absolute path to a PDF document or a PDF file input stream; the component then provides methods for working with that PDF. It's not a singleton, so it shouldn't be stored in a permanent scope; you need to instantiate `pdfbox.cfc` for each PDF you're working with.
+Instances of `pdfbox.cfc` are created by passing it the absolute path to a PDF document (it will accept a few other things, but that's the simplest); the component then provides methods for working with that PDF. It's not a singleton, so it shouldn't be stored in a permanent scope; you need to instantiate `pdfbox.cfc` for each PDF you're working with.
 
 ```cfc
 pdf = new pdfbox( src = 'absolute/path/to/pdf' );
@@ -45,7 +45,7 @@ Returns the text extracted from the PDF document.
 Returns the text extracted from specific pages of the pdf document. The `endpage` argument defaults to the same as the `startpage` if not provided.
 
 #### `getTextAsHtml()`
-Returns the text extracted from the PDF, wrapped in simple html. The underlying class used is [PDFText2HTML](https://pdfbox.apache.org/docs/2.0.8/javadocs/org/apache/pdfbox/tools/PDFText2HTML.html).
+Returns the text extracted from the PDF, wrapped in simple html. The underlying class used is [PDFText2HTML](https://javadoc.io/static/org.apache.pdfbox/pdfbox-tools/3.0.6/org/apache/pdfbox/tools/PDFText2HTML.html).
 
 #### `drawRectangle( required numeric page, required numeric x, required numeric y, required numeric width, required numeric height, numeric lineWidth = 2, string color = "black")`
 Draws a rectangle on the PDF at given coordinates.
@@ -56,14 +56,14 @@ Flattens any forms on the pdf.
 __Note__: Data in XFA forms is not visible after this process. Chrome/Firefox/Safari/Preview no longer support XFA PDFs; the format seems to be on its way out and is only supported by Adobe (via Acrobat) and IE. Adobe ColdFusion does not allow cfpdf's 'sanitize' action on PDFs with XFA content.
 
 #### `listAnnotations()`
-Returns all annotations within the pdf as an array; the type of each object returned is [PDAnnotation](https://pdfbox.apache.org/docs/2.0.8/javadocs/org/apache/pdfbox/pdmodel/interactive/annotation/PDAnnotation.html), so you'll need to look at the javadocs for that to see what methods are available.
+Returns all annotations within the pdf as an array; the type of each object returned is [PDAnnotation](https://javadoc.io/static/org.apache.pdfbox/pdfbox/3.0.6/index.html?org/apache/pdfbox/pdmodel/interactive/annotation/PDAnnotation.html), so you'll need to look at the javadocs for that to see what methods are available.
 
 #### `removeAnnotations()`
 Strips out comments and other annotations.
 
 __Note__: Form fields are made visible/usable via annotations (as I understand it); consequently, removing all annotations renders forms, effectively, invisible and unusable, though the markup remains present (visible via a PDF Debugger). The default behavior of `pdfbox.cfc`, therefore, is to leave annotations related to forms present, so that the forms remain functional. While you can remove form annotations by setting `preserveForm = false`, the better approach is to use `flatten()`.
 
-Additionally, be aware that links are a type of annotation ([PDAnnotationLink](https://pdfbox.apache.org/docs/2.0.8/javadocs/org/apache/pdfbox/pdmodel/interactive/annotation/PDAnnotationLink.html)) so they're removed by this method.
+Additionally, be aware that links are a type of annotation ([PDAnnotationLink](https://javadoc.io/static/org.apache.pdfbox/pdfbox/3.0.6/index.html?org/apache/pdfbox/pdmodel/interactive/annotation/PDAnnotation.html)) so they're removed by this method.
 
 #### `removeEmbeddedFiles()`
 Removes embedded files.
@@ -126,7 +126,7 @@ Returns an array of with the titles for the document outline sections (bookmarks
 
 
 #### Other Methods Not Mentioned Here
-For methods not explicity provided, this project uses `onMissingMethod()` to invoke the underlying PDFBox library class for `PDDocument`, which is its in-memory representation of the PDF document, documented [here](https://pdfbox.apache.org/docs/2.0.13/javadocs/org/apache/pdfbox/pdmodel/PDDocument.html). Consequently, you can utilize some of the methods provided by PDFBox directly. For example, `pdfbox.getNumberOfPages()` will return the number of pages the document has; it does this by delegating to the [`getNumberOfPages()`](https://pdfbox.apache.org/docs/2.0.13/javadocs/org/apache/pdfbox/pdmodel/PDDocument.html#getNumberOfPages--) method in the `PDDocument` class.
+For methods not explicity provided, this project uses `onMissingMethod()` to invoke the underlying PDFBox library class for `PDDocument`, which is its in-memory representation of the PDF document, documented [here](https://javadoc.io/static/org.apache.pdfbox/pdfbox/3.0.6/index.html?org/apache/pdfbox/pdmodel/interactive/annotation/PDAnnotation.html). Consequently, you can utilize some of the methods provided by PDFBox directly. For example, `pdfbox.getNumberOfPages()` will return the number of pages the document has; it does this by delegating to the [`getNumberOfPages()`](https://javadoc.io/static/org.apache.pdfbox/pdfbox/3.0.6/index.html?org/apache/pdfbox/pdmodel/interactive/annotation/PDAnnotation.html) method in the `PDDocument` class.
 
 ### Requirements
 
