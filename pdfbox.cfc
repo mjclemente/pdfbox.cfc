@@ -564,16 +564,10 @@ component output="false" displayname="pdfbox.cfc" {
   }
 
   /**
-   * @hint Broken out so that, when using Lucee, we can differentiate between project and Lucee PDFBox versions
+   * @hint In an earlier version this was broken out to handle Lucee class path issues, but that seems to be resolved with Lucee 6. We're leaving the method for - it seems fine as a convenience
    */
   private any function getPDDocument() {
-    // if a class pass is not provided, we need to override Lucee PDFBox version
-    if( serverVersion == "Lucee" && !hasClassPath() ){
-      return createObject("java", "org.apache.pdfbox.pdmodel.PDDocument", "org.apache.pdfbox.app");
-    } else {
-      // just use the main helper if ACF or a class path is provided for lucee
-      return createObjectHelper("org.apache.pdfbox.pdmodel.PDDocument");
-    }
+     return createObjectHelper("org.apache.pdfbox.pdmodel.PDDocument");
   }
 
   /**
@@ -597,12 +591,8 @@ component output="false" displayname="pdfbox.cfc" {
       if( variables.serverVersion == "ColdFusion" ){
         return createObject("java", classname);
       } else {
-        // use the symbolic name when loading pdfbox jars, to try to prevent collisions
-        if( classname.findnocase("pdfbox") ){
-          return createObject("java", classname, "org.apache.pdfbox.app");
-        } else {
-          return createObject("java", classname);
-        }
+        // right now we're handling lucee the same as ACF, but leaving this here in case we need to do something different later
+        return createObject("java", classname);
       }
     }
   }
