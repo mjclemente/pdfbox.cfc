@@ -1,6 +1,6 @@
 {
     "app":{
-        "cfengine":"adobe@2016"
+        "cfengine":"adobe@2025"
     },
     "web":{
         "http":{
