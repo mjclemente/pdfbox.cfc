@@ -25,12 +25,11 @@ component output="false" displayname="pdfbox.cfc" {
 
     variables.hasMetadata = true;
 
-    var fileInputStream = isSimpleValue(src)
-     ? getFileInputStream(src)
+    var buffered_file = isSimpleValue(src)
+     ? getRandomAccessReadBufferedFile(src)
      : src;
 
-    var reader    = getPDDocument();
-    variables.pdf = reader.load(fileInputStream);
+    variables.pdf    = getPDDocument(buffered_file);
 
     variables.additionalDocuments = [];
 
@@ -468,14 +467,11 @@ component output="false" displayname="pdfbox.cfc" {
    * @pdfPages must be either the absolute path to a pdf file on disk, or a coldfusion pdf object
    */
   public any function addPages(required any pdfPages) {
-    var reader = getPDDocument();
-
     if( isSimpleValue(pdfPages) && fileExists(pdfPages) && fileGetMimeType(pdfPages) == "application/pdf" ){
-      var tempPdf = reader.load(getFileInputStream(pdfPages));
+      var tempPdf = getPDDocument(getRandomAccessReadBufferedFile(pdfPages));
     } else if( isPDFObject(pdfPages) ){
-      var tempPdf = reader.load(pdfPages);
+      var tempPdf = getPDDocument(pdfPages);
     } else {
-      reader.close();
       throw(
         "The argument passed to #getFunctionCalledName()# is not valid. It should either be the absolute path to a valid pdf file, or ColdFusion pdf object."
       );
@@ -563,11 +559,13 @@ component output="false" displayname="pdfbox.cfc" {
     return createObject("java", "java.io.FileInputStream").init(javacast("string", src));
   }
 
-  /**
-   * @hint In an earlier version this was broken out to handle Lucee class path issues, but that seems to be resolved with Lucee 6. We're leaving the method for - it seems fine as a convenience
-   */
-  private any function getPDDocument() {
-     return createObjectHelper("org.apache.pdfbox.pdmodel.PDDocument");
+  private any function getRandomAccessReadBufferedFile(required string src) {
+    return createObject("java", "org.apache.pdfbox.io.RandomAccessReadBufferedFile").init(javacast("string", src));
+  }
+
+  private any function getPDDocument(required any fileInputStream) {
+    var loader = createObjectHelper("org.apache.pdfbox.Loader");
+     return loader.loadPDF(fileInputStream);
   }
 
   /**
