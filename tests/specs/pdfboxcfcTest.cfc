@@ -45,7 +45,7 @@ component extends="testbox.system.BaseSpec" {
 
       it("is using the expected version", function() {
         pdfbox = new pdfbox.pdfbox(variables.pdfs.friday);
-        expect(pdfbox.getVersion()).toBe("2.0.30");
+        expect(pdfbox.getVersion()).toBe("3.0.6");
       });
 
       it("can count the number of pages", function() {
