@@ -464,7 +464,7 @@ component output="false" displayname="pdfbox.cfc" {
    */
   public any function addPages(required any pdfPages) {
     if( isSimpleValue(pdfPages) && fileExists(pdfPages) && fileGetMimeType(pdfPages) == "application/pdf" ){
-      var tempPdf = getPDDocument(getRandomAccessReadBufferedFile(pdfPages));
+      var tempPdf = getPDDocument(pdfPages);
     } else if( isPDFObject(pdfPages) ){
       var tempPdf = getPDDocument(pdfPages);
     } else {
