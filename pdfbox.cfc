@@ -573,13 +573,14 @@ component output="false" displayname="pdfbox.cfc" {
       return loader.loadPDF(buffered_file);
     }
 
-    // if it's an instance of an S3ObjectInputStream
-    if( isInstanceOf( arguments.source, "com.amazonaws.services.s3.model.S3ObjectInputStream" ) ){
-      var byte_array = createObjectHelper("org.apache.commons.io.IOUtils").toByteArray( arguments.source );
-      return loader.loadPDF( byte_array );
+    if( isPDFObject(arguments.source) ){
+      // coldfusion pdf object
+      return loader.loadPDF(arguments.source);
     }
-    // coldfusion pdf object
-    return loader.loadPDF(arguments.source);
+
+    // we'll try to turn everything else into a byte array
+    var byte_array = createObjectHelper("org.apache.commons.io.IOUtils").toByteArray( arguments.source );
+    return loader.loadPDF( byte_array );
   }
 
   /**
