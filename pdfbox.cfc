@@ -19,8 +19,8 @@ component output="false" displayname="pdfbox.cfc" {
 
     variables.classPath = arguments.classPath;
 
-    variables.src = isSimpleValue(src)
-     ? src
+    variables.src = isSimpleValue(arguments.src)
+     ? arguments.src
      : "";
 
     variables.hasMetadata = true;
