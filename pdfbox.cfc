@@ -223,7 +223,7 @@ component output="false" displayname="pdfbox.cfc" {
       var page = iterator.next();
 
       if( !preserveForm ){
-        page.setAnnotations(javacast("null", ""));
+        page.setAnnotations([]);
       } else {
         var annotations        = [];
         var annotationIterator = page.getAnnotations().iterator();
