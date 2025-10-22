@@ -25,11 +25,7 @@ component output="false" displayname="pdfbox.cfc" {
 
     variables.hasMetadata = true;
 
-    var buffered_file = isSimpleValue(src)
-     ? getRandomAccessReadBufferedFile(src)
-     : src;
-
-    variables.pdf    = getPDDocument(buffered_file);
+    variables.pdf    = getPDDocument(arguments.src);
 
     variables.additionalDocuments = [];
 
@@ -563,9 +559,27 @@ component output="false" displayname="pdfbox.cfc" {
     return createObject("java", "org.apache.pdfbox.io.RandomAccessReadBufferedFile").init(javacast("string", src));
   }
 
-  private any function getPDDocument(required any fileInputStream) {
+  private any function getPDDocument( any source ) {
+
+    if( isNull(arguments.source) ){
+      return createObjectHelper("org.apache.pdfbox.pdmodel.PDDocument").init();
+    }
+
     var loader = createObjectHelper("org.apache.pdfbox.Loader");
-     return loader.loadPDF(fileInputStream);
+
+    // it's a file
+    if( isSimpleValue(arguments.source) ){
+      var buffered_file = getRandomAccessReadBufferedFile(arguments.source);
+      return loader.loadPDF(buffered_file);
+    }
+
+    // if it's an instance of an S3ObjectInputStream
+    if( isInstanceOf( arguments.source, "com.amazonaws.services.s3.model.S3ObjectInputStream" ) ){
+      var byte_array = createObjectHelper("org.apache.commons.io.IOUtils").toByteArray( arguments.source );
+      return loader.loadPDF( byte_array );
+    }
+    // coldfusion pdf object
+    return loader.loadPDF(arguments.source);
   }
 
   /**
