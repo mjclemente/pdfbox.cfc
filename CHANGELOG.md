@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [2.0.0] - 2025-10-22
+
+### Changed
+
+- Updated from PDFBox 2.0.30 to 3.0.6 (which involved some plumbing changes)
+
 ## [1.8.0] - 2025-03-11
 
 - Method `drawRectangle()`
