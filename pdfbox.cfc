@@ -556,7 +556,7 @@ component output="false" displayname="pdfbox.cfc" {
   }
 
   private any function getRandomAccessReadBufferedFile(required string src) {
-    return createObject("java", "org.apache.pdfbox.io.RandomAccessReadBufferedFile").init(javacast("string", src));
+    return createObjectHelper("org.apache.pdfbox.io.RandomAccessReadBufferedFile").init(javacast("string", src));
   }
 
   private any function getPDDocument( any source ) {
