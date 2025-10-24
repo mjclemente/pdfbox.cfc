@@ -1,8 +1,8 @@
 {
   "name": "pdfbox.cfc",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "author": "Matthew Clemente <mjclemente@gmail.com>",
-  "location": "mjclemente/pdfbox.cfc#v2.0.2",
+  "location": "mjclemente/pdfbox.cfc#v2.0.3",
   "homepage": "https://github.com/mjclemente/pdfbox.cfc",
   "documentation": "https://github.com/mjclemente/pdfbox.cfc",
   "repository": {
