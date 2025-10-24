@@ -493,6 +493,11 @@ component output="false" displayname="pdfbox.cfc" {
   */
   public void function splitPages(required string dest, required numeric startpage, required numeric endpage ){
 
+    if( fileExists(arguments.dest) ){
+      close();
+      throw("The destination file already exists. Please choose a different destination.");
+    }
+
     if( arguments.startpage < 1 || arguments.endpage > variables.pdf.getNumberOfPages() ){
       close();
       throw("The start and end page numbers must be within the range of the pdf document (#variables.pdf.getNumberOfPages()# pages).");
@@ -512,30 +517,29 @@ component output="false" displayname="pdfbox.cfc" {
       }
     }
 
-    newPdf.save(dest);
+    newPdf.save(arguments.dest);
 
     newPdf.close();
   }
 
   /**
-   * @hint By default, the file is saved to the same path that it was loaded from.
-   *
    * Note that saving the document also automatically closes the instance of the PDDocument that was created, so it should be the last thing you do with this object.
    *
-   * @dest Override the path to save the modified pdf to a new location. If the destination does not exist, it is created automatically
+   * @dest As of PDFBox 3.0, the destination a file is saved to cannot be the same as the source. Consequently, a destination path must always be provided. An error will be thrown if it is the same as the source. If the destination does not exist, it is created automatically
    */
-  public void function save(string dest = "") {
-    if( dest.len() ){
-      var directory = getDirectoryFromPath(dest);
+  public void function save(required string dest) {
 
-      if( !directoryExists(directory) ) directoryCreate(directory);
+    var directory = getDirectoryFromPath(arguments.dest);
+    if( !directoryExists(directory) ){
+      directoryCreate(directory);
     }
 
-    if( !dest.len() && !variables.src.len() )
-      throw("You must provide a destination in order to save a pdf file input stream.");
+    if( arguments.dest == variables.src ){
+      close();
+      throw("The destination the file is saved to cannot be the same as the source file.");
+    }
 
-    variables.pdf.save(dest.len() ? dest : variables.src);
-
+    variables.pdf.save(arguments.dest);
     close();
   }
 
