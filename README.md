@@ -34,6 +34,7 @@ text = pdf.getText();
 pdf.flatten();
 
 //Save a copy of the edited pdf
+//IMPORTANT: as of pdfbox 3, you overwrite the source file when saving
 pdf.save( expandPath( "./output/flattened.pdf" ) );
 ```
 
@@ -101,8 +102,8 @@ Add a page or pages to the end of the PDF. The `pdfPages` argument must be eithe
 #### `splitPages( required string dest, required numeric startpage, required numeric endpage )`
 Split pages from the source pdf into a separate file. The `dest` argument provides the location for the new file. The `startpage` is the first page to include in the new file, up to and including the `endpage`.
 
-#### `save( string dest = "" )`
-By default, this saves the PDF to the same path that it was loaded from. You can use the `dest` argument to save the modified PDF to a new location. If the destination does not exist, it is created automatically. Note that the `dest` argument is required in order to save PDFs loaded from file input streams.
+#### `save( required string dest )`
+As of PDFBox 3.0, the destination a file is saved to cannot be the same as the source. Consequently, a destination path must always be provided. An error will be thrown if it is the same as the source. If the destination does not exist, it is created automatically
 
 __Note__: For convenience, saving the document also automatically closes the PDFBox instance that was created, so it should be the last thing you do with this object.
 

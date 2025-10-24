@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [2.0.3] - 2025-10-24
+
+### Fixed
+
+- Account for PDFBox 3 not allowing file to overwrite source
+
+### Changed
+
+- Breaking: Due to changes in PDFBox v3, you can no longer overwrite the source file when saving. You must provide a new, destination file location.
+
 ## [2.0.2] - 2025-10-23
 
 ### Fixed
